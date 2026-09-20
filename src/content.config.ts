@@ -104,6 +104,11 @@ const configCatalogoMacetas = defineCollection({
     kicker: z.string(),
     titulo: z.string(),
     texto: z.string(),
+    // Paleta compartida por TODAS las macetas (un solo lugar para editar
+    // el color real de cada globito) — cada maceta después solo referencia
+    // uno de estos nombres en su propia lista de colores. Mismo patrón que
+    // "Objeto → Texto y colores" en estudio-s3.
+    colores: z.array(z.object({ nombre: z.string(), swatch: z.string() })),
   }),
 });
 
@@ -153,7 +158,28 @@ const configGaleria = defineCollection({
 });
 
 // ---------- 🌤️ Guía de cuidados (acordeón) ----------
-const ICONO_CUIDADO = ["luz", "riego", "trasplante", "hojas", "mascotas"] as const;
+// Tiene que coincidir EXACTO con las claves de ICONOS en
+// public/admin/icon-picker.js (el widget visual del panel) y en
+// src/components/Icon.astro (el que realmente dibuja el ícono en el
+// sitio) — son tres archivos separados que no pueden compartir módulo
+// (dos corren en Node/build, uno es JS de navegador clásico sin bundler).
+const ICONO_CUIDADO = [
+  "sol",
+  "gota",
+  "hoja",
+  "maceta",
+  "pata",
+  "reloj",
+  "calendario",
+  "estrella",
+  "corazon",
+  "lupa",
+  "campana",
+  "ubicacion",
+  "familia",
+  "libro",
+  "candado",
+] as const;
 const configGuiaCuidados = defineCollection({
   loader: file("./src/content/config/guia-cuidados.yaml"),
   schema: z.object({

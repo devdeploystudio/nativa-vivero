@@ -7,6 +7,10 @@
     <link rel="icon" href="data:," />
   </head>
   <body>
+    <!-- Sin type="module": los widgets/previews propios (icon-picker.js)
+         usan CMS.registerWidget, la API clásica que Sveltia expone en
+         window — cargarlo como módulo ES puede romperla. -->
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script src="icon-picker.js"></script>
   </body>
 </html>

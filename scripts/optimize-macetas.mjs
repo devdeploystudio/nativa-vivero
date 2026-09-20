@@ -3,7 +3,7 @@
 // versión blanca del isotipo para usar como marca de agua sobre fondos
 // oscuros y en el favicon.
 import sharp from "sharp";
-import { mkdir, rename } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import path from "node:path/posix";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
@@ -11,37 +11,35 @@ const PUB = path.join(ROOT, "public");
 const SRC = path.join(ROOT, "sources");
 
 const jobs = [
-  { from: "maceta 1.png", to: "macetas/maceta-01-redonda-crema.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_45 (2).png", to: "macetas/maceta-01-redonda-terracota.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_45 (1).png", to: "macetas/maceta-01-redonda-salvia.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_45 (3).png", to: "macetas/maceta-01-redonda-carbon.jpg" },
+  { from: "maceta-01-redonda-crema.png", to: "macetas/maceta-01-redonda-crema.jpg" },
+  { from: "maceta-01-redonda-terracota.png", to: "macetas/maceta-01-redonda-terracota.jpg" },
+  { from: "maceta-01-redonda-salvia.png", to: "macetas/maceta-01-redonda-salvia.jpg" },
+  { from: "maceta-01-redonda-carbon.png", to: "macetas/maceta-01-redonda-carbon.jpg" },
 
-  { from: "maceta 2.png", to: "macetas/maceta-02-acanalada-terracota.jpg" },
+  { from: "maceta-02-acanalada-terracota.png", to: "macetas/maceta-02-acanalada-terracota.jpg" },
 
-  { from: "maceta 3.png", to: "macetas/maceta-03-conica-crema.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_45 (4).png", to: "macetas/maceta-03-conica-salvia.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_45 (5).png", to: "macetas/maceta-03-conica-terracota.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_46 (6).png", to: "macetas/maceta-03-conica-carbon.jpg" },
+  { from: "maceta-03-conica-crema.png", to: "macetas/maceta-03-conica-crema.jpg" },
+  { from: "maceta-03-conica-salvia.png", to: "macetas/maceta-03-conica-salvia.jpg" },
+  { from: "maceta-03-conica-terracota.png", to: "macetas/maceta-03-conica-terracota.jpg" },
+  { from: "maceta-03-conica-carbon.png", to: "macetas/maceta-03-conica-carbon.jpg" },
 
-  { from: "maceta 4.png", to: "macetas/maceta-04-pedestal-crema.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_46 (7).png", to: "macetas/maceta-04-pedestal-salvia.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_46 (8).png", to: "macetas/maceta-04-pedestal-terracota.jpg" },
-  { from: "ChatGPT Image 19 sept 2026, 19_11_46 (9).png", to: "macetas/maceta-04-pedestal-carbon.jpg" },
+  { from: "maceta-04-pedestal-crema.png", to: "macetas/maceta-04-pedestal-crema.jpg" },
+  { from: "maceta-04-pedestal-salvia.png", to: "macetas/maceta-04-pedestal-salvia.jpg" },
+  { from: "maceta-04-pedestal-terracota.png", to: "macetas/maceta-04-pedestal-terracota.jpg" },
+  { from: "maceta-04-pedestal-carbon.png", to: "macetas/maceta-04-pedestal-carbon.jpg" },
 
-  { from: "'maceta 5.png", to: "macetas/maceta-05-plato-salvia.jpg" },
+  { from: "maceta-05-plato-salvia.png", to: "macetas/maceta-05-plato-salvia.jpg" },
 ];
 
 async function run() {
   await mkdir(path.join(PUB, "macetas"), { recursive: true });
 
   for (const job of jobs) {
-    const from = path.join(ROOT, job.from);
+    const from = path.join(SRC, job.from);
     const dest = path.join(PUB, job.to);
     const buf = await sharp(from).resize({ width: 1100, withoutEnlargement: true }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
     await sharp(buf).toFile(dest);
     console.log(`✓ ${job.to} (${(buf.length / 1024).toFixed(0)} KB)`);
-    // Mover el original a sources/ como respaldo, ya optimizado el destino.
-    await rename(from, path.join(SRC, job.from.replace(/^'/, "")));
   }
 
   // ---------- Versión blanca del isotipo ----------

@@ -3,3 +3,12 @@ catalogoMacetas:
   kicker: "Macetas"
   titulo: "Vestí tu planta"
   texto: "Cada maceta está disponible en varios colores. Elegí el tono y mirá cómo queda antes de consultar."
+  colores:
+    - nombre: "Crema"
+      swatch: "#e8dcc4"
+    - nombre: "Terracota"
+      swatch: "#c17a4e"
+    - nombre: "Verde salvia"
+      swatch: "#8a9a78"
+    - nombre: "Gris carbón"
+      swatch: "#4a4d4a"

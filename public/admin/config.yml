@@ -182,19 +182,10 @@ collections:
               - label: "Preguntas"
                 name: "items"
                 widget: "list"
-                hint: "Se pueden agregar, borrar y reordenar arrastrando. El ícono es del tema de la pregunta (elegí el que mejor represente el contenido)."
+                hint: "Se pueden agregar, borrar y reordenar arrastrando. Para cada pregunta nueva, tocá el dibujo que mejor represente el tema."
                 summary: "{{fields.pregunta}}"
                 fields:
-                  - label: "Ícono"
-                    name: "icono"
-                    widget: "select"
-                    hint: "Elegí de la lista, así el dibujo siempre queda prolijo."
-                    options:
-                      - { label: "Luz", value: "luz" }
-                      - { label: "Riego", value: "riego" }
-                      - { label: "Trasplante", value: "trasplante" }
-                      - { label: "Hojas", value: "hojas" }
-                      - { label: "Mascotas", value: "mascotas" }
+                  - { label: "Ícono", name: "icono", widget: "icon-picker" }
                   - { label: "Pregunta", name: "pregunta", widget: "string" }
                   - { label: "Respuesta", name: "respuesta", widget: "text" }
 
@@ -357,8 +348,8 @@ collections:
           - { label: "Pet-friendly", value: "pet-friendly" }
 
   - name: "config-catalogo-macetas"
-    label: "🏺 Catálogo → Macetas (texto)"
-    description: "El texto de arriba de la grilla de macetas, en la página \"Catálogo\"."
+    label: "🏺 Catálogo → Macetas (texto y colores)"
+    description: "El texto de arriba de la grilla de macetas, y la paleta de colores disponibles (compartida por todas las macetas), en la página \"Catálogo\". Para agregar un color nuevo, cargalo acá primero y después usalo en la ficha de cada maceta (\"Catálogo → Macetas\")."
     files:
       - name: "catalogo-macetas"
         label: "Texto de Macetas"
@@ -372,6 +363,14 @@ collections:
               - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
               - { label: "Título", name: "titulo", widget: "string" }
               - { label: "Texto", name: "texto", widget: "text" }
+              - label: "Colores disponibles"
+                name: "colores"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando. Usá el nombre tal cual (ej: \"Verde salvia\") en el campo \"Nombre del color\" de cada foto, en la ficha de cada maceta, para que el globito de esa foto quede pintado con este color."
+                summary: "{{fields.nombre}}"
+                fields:
+                  - { label: "Nombre", name: "nombre", widget: "string" }
+                  - { label: "Color del globito", name: "swatch", widget: "color" }
 
   - name: "macetas"
     label: "🏺 Catálogo → Macetas"
@@ -393,7 +392,7 @@ collections:
         hint: "La primera foto de la lista es la que se ve por default. Se pueden agregar, borrar y reordenar arrastrando."
         summary: "{{fields.nombre}}"
         fields:
-          - { label: "Nombre del color (ej: \"Verde salvia\")", name: "nombre", widget: "string" }
+          - { label: "Nombre del color", name: "nombre", widget: "string", hint: "Tiene que decir EXACTAMENTE igual que uno de los nombres cargados en \"Catálogo → Macetas (texto y colores)\" (ej: \"Verde salvia\"), si no el globito de esta foto no va a tener color." }
           - { label: "Foto en ese color", name: "imagen", widget: "image", media_folder: "/public/macetas", public_folder: "/macetas" }
 
   # Página aparte, accesible desde el menú del sitio ("Contacto").

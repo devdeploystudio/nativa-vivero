@@ -4,16 +4,13 @@ import { getEntry, getCollection } from "astro:content";
 const c = (await getEntry("configCatalogoMacetas", "catalogoMacetas"))!.data;
 const macetas = (await getCollection("macetas")).sort((a, b) => a.data.orden - b.data.orden);
 
-// Un color por nombre, para pintar el globito sin depender de que el
-// panel elija también un color de UI (el nombre del color YA es el dato,
-// el círculo es solo una ayuda visual). Si aparece un color nuevo que no
-// está en este mapa, el globito cae a un gris neutro en vez de romper.
-const SWATCH: Record<string, string> = {
-  Crema: "#e8dcc4",
-  Terracota: "#c17a4e",
-  "Verde salvia": "#8a9a78",
-  "Gris carbón": "#4a4d4a",
-};
+// Paleta compartida (editable en "Catálogo → Macetas (texto)" del panel,
+// con selector de color real): cada maceta más abajo solo escribe el
+// NOMBRE del color en su propia lista de fotos, y acá se busca el hex que
+// le corresponde para pintar el globito. Si un color no está cargado en
+// la paleta (typo, o recién se agregó una maceta con un color nuevo que
+// todavía no se sumó acá), cae a un gris neutro en vez de romper.
+const SWATCH: Record<string, string> = Object.fromEntries(c.colores.map((color) => [color.nombre, color.swatch]));
 ---
 
 <section class="bg-surface-soft py-12 lg:py-20">
