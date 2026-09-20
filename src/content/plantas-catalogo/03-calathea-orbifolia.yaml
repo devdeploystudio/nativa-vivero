@@ -1,0 +1,6 @@
+orden: 3
+nombre: "Calathea Orbifolia"
+imagen: "/plantas/calathea-orbifolia.jpg"
+luz: "media"
+dificultad: "intermedia"
+categorias: ["interior", "pet-friendly"]

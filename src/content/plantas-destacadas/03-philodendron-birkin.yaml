@@ -1,0 +1,9 @@
+orden: 3
+nombre: "Philodendron Birkin"
+nombreCientifico: "Philodendron 'Birkin'"
+imagen: "/plantas/philodendron-birkin.jpg"
+descripcion: "Hojas oscuras rayadas en blanco, compactas y prolijas: una de las que más preguntan en el vivero. Crece despacio y ordenada, ideal para escritorios y repisas chicas."
+luz: "media"
+riego: "moderado"
+dificultad: "facil"
+petFriendly: false

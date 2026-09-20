@@ -1,0 +1,96 @@
+---
+import { getEntry } from "astro:content";
+import { WHATSAPP_NUMBER } from "../config/site";
+import { buildConsultaGeneralLink } from "../lib/whatsapp";
+
+const texto = (await getEntry("configInicioHero", "inicioHero"))!.data;
+const fotos = (await getEntry("configInicioFotos", "inicioFotos"))!.data;
+const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
+---
+
+<section class="relative flex h-[92svh] min-h-[560px] items-center overflow-hidden">
+  <div id="hero-slides" class="absolute inset-0">
+    {
+      fotos.slides.map((slide, i) => (
+        <div
+          class="hero-slide absolute inset-0"
+          class:list={[{ "is-active": i === 0 }]}
+          style={`background-image: linear-gradient(180deg, rgba(15,18,12,0.5) 0%, rgba(15,18,12,0.55) 55%, rgba(10,12,8,0.9) 100%), url('${slide.imagen}')`}
+          role="img"
+          aria-label={slide.alt}
+        />
+      ))
+    }
+  </div>
+
+  <div class="relative z-10 mx-auto w-full max-w-[90rem] px-5 pt-12 sm:px-8">
+    <img
+      src="/logo-mark-white.png"
+      alt=""
+      aria-hidden="true"
+      width="60"
+      height="60"
+      class="reveal-on-scroll h-12 w-12 object-contain opacity-95 [filter:drop-shadow(0_2px_10px_rgba(0,0,0,0.35))]"
+    />
+    <h1 class="reveal-on-scroll mt-5 max-w-2xl font-display text-4xl leading-[1.08] text-canvas [text-shadow:0_2px_16px_rgba(0,0,0,0.35)] sm:text-5xl lg:text-6xl">
+      {texto.titulo}
+    </h1>
+    <p class="reveal-on-scroll mt-5 max-w-xl font-body text-base leading-relaxed text-canvas/85 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)] sm:text-lg">
+      {texto.bajada}
+    </p>
+    <div class="reveal-on-scroll mt-8 flex flex-wrap gap-3">
+      <a
+        href={waLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ubicacion="hero"
+        class="btn-press rounded-full bg-clay px-6 py-3.5 font-body text-sm font-semibold text-ink transition-colors hover:bg-clay-active"
+      >
+        {texto.ctaPrincipalTexto}
+      </a>
+      <a
+        href="#destacadas"
+        class="btn-press rounded-full border border-canvas/40 px-6 py-3.5 font-body text-sm font-semibold text-canvas transition-colors hover:bg-canvas/10"
+      >
+        {texto.ctaSecundarioTexto}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-slide {
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.06);
+    transition:
+      opacity 1.4s ease,
+      transform 8s linear;
+  }
+  .hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+      transition: opacity 0.3s ease;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const slides = Array.from(document.querySelectorAll<HTMLElement>(".hero-slide"));
+  let current = 0;
+
+  function goTo(index: number) {
+    slides[current]?.classList.remove("is-active");
+    current = (index + slides.length) % slides.length;
+    slides[current]?.classList.add("is-active");
+  }
+
+  if (slides.length > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(() => goTo(current + 1), 5500);
+  }
+</script>

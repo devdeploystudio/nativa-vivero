@@ -1,0 +1,6 @@
+orden: 6
+nombre: "Espatifilo"
+imagen: "/plantas/espatifilo.jpg"
+luz: "media"
+dificultad: "intermedia"
+categorias: ["interior", "con-flor"]

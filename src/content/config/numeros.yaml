@@ -1,0 +1,15 @@
+numeros:
+  id: "numeros"
+  items:
+    - numero: 12
+      sufijo: ""
+      etiqueta: "Años en Escobar"
+    - numero: 180
+      sufijo: "+"
+      etiqueta: "Especies en stock"
+    - numero: 4000
+      sufijo: "+"
+      etiqueta: "Plantas entregadas"
+    - numero: 30
+      sufijo: ""
+      etiqueta: "Días de garantía de arraigo"

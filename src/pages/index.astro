@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../config/site";
+import Hero from "../components/Hero.astro";
+import PlantasDestacadas from "../components/PlantasDestacadas.astro";
+import Buscador from "../components/Buscador.astro";
+import Galeria from "../components/Galeria.astro";
+import GuiaCuidados from "../components/GuiaCuidados.astro";
+import Testimonios from "../components/Testimonios.astro";
+import Numeros from "../components/Numeros.astro";
+import ComoFunciona from "../components/ComoFunciona.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+---
+
+<Layout title={SITE.nombre} tituloConGuion={false}>
+  <Hero />
+  <PlantasDestacadas />
+  <Buscador />
+  <Galeria />
+  <GuiaCuidados />
+  <Testimonios />
+  <Numeros />
+  <ComoFunciona />
+  <CtaFinal />
+</Layout>

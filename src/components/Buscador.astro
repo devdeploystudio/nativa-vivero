@@ -1,0 +1,188 @@
+---
+import { getEntry, getCollection } from "astro:content";
+import { WHATSAPP_NUMBER } from "../config/site";
+
+const c = (await getEntry("configBuscador", "buscador"))!.data;
+
+const destacadas = await getCollection("plantasDestacadas");
+const catalogo = await getCollection("plantasCatalogo");
+
+// Dataset chico para la recomendación en el cliente: no hace falta traer
+// todos los campos, solo los que entran en el matching + lo que se muestra
+// en el resultado.
+const opciones = [
+  ...destacadas.map((p) => ({
+    nombre: p.data.nombre,
+    imagen: p.data.imagen,
+    luz: p.data.luz,
+    dificultad: p.data.dificultad,
+    petFriendly: p.data.petFriendly,
+  })),
+  ...catalogo.map((p) => ({
+    nombre: p.data.nombre,
+    imagen: p.data.imagen,
+    luz: p.data.luz,
+    dificultad: p.data.dificultad,
+    petFriendly: p.data.categorias.includes("pet-friendly"),
+  })),
+];
+
+const fotoInicial = destacadas[0]?.data.imagen ?? "/plantas/monstera-deliciosa.jpg";
+---
+
+<section class="mx-auto max-w-[90rem] px-5 py-12 sm:px-8 lg:py-20">
+  <div class="reveal-on-scroll grid overflow-hidden rounded-3xl border border-forest-deep/40 bg-forest shadow-[0_24px_60px_-24px_rgba(35,44,29,0.45)] lg:grid-cols-2">
+    <div class="relative min-h-[22rem] overflow-hidden lg:min-h-[30rem]">
+      <img id="buscador-foto" src={fotoInicial} alt="" width="900" height="1100" class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/92 via-forest-deep/15 to-forest-deep/45"></div>
+      <img src="/logo-mark-white.png" alt="" aria-hidden="true" width="40" height="40" class="absolute left-6 top-6 h-9 w-9 opacity-90 sm:left-8 sm:top-8" />
+
+      <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+        <p id="buscador-placeholder" class="font-body text-base leading-relaxed text-canvas/80">
+          Respondé las preguntas y te mostramos acá la planta que mejor se adapta.
+        </p>
+
+        <div id="buscador-resultado" class="hidden">
+          <p class="font-body text-xs uppercase tracking-wide text-clay">Te recomendamos</p>
+          <p id="buscador-resultado-nombre" class="mt-1 font-display text-2xl text-canvas sm:text-3xl"></p>
+          <p id="buscador-resultado-razon" class="mt-2 max-w-sm font-body text-sm leading-relaxed text-canvas/75"></p>
+          <a id="buscador-resultado-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-press mt-4 inline-flex rounded-full bg-clay px-5 py-2.5 font-body text-sm font-semibold text-ink transition-colors hover:bg-clay-active">
+            {c.ctaTexto}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-canvas p-6 sm:p-10 lg:p-12">
+      <p class="font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay-active">{c.kicker}</p>
+      <h2 class="mt-2 font-display text-2xl text-ink sm:text-3xl">{c.titulo}</h2>
+      <p class="mt-3 font-body text-sm leading-relaxed text-muted">{c.texto}</p>
+
+      <div class="mt-7">
+        <p class="font-body text-sm font-semibold text-ink">¿Cuánta luz tiene tu espacio?</p>
+        <div class="mt-3 flex flex-wrap gap-2" data-grupo="luz">
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="poca">Poca</button>
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="media">Media</button>
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="mucha">Mucha</button>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <p class="font-body text-sm font-semibold text-ink">¿Cuánto tiempo le podés dedicar?</p>
+        <div class="mt-3 flex flex-wrap gap-2" data-grupo="tiempo">
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="facil">Poco</button>
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="intermedia">Moderado</button>
+          <button type="button" class="buscador-opt btn-press rounded-full border border-hairline px-4 py-2 font-body text-sm font-medium" data-valor="experta">Mucho</button>
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-center justify-between gap-4 border-t border-hairline pt-5">
+        <p class="font-body text-sm font-semibold text-ink">¿Tenés mascotas en casa?</p>
+        <button type="button" id="buscador-mascota" role="switch" aria-checked="false" class="relative h-7 w-12 shrink-0 rounded-full bg-hairline transition-colors">
+          <span class="absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-surface shadow transition-transform"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="buscador-data" set:html={JSON.stringify({ opciones, whatsapp: WHATSAPP_NUMBER })} />
+
+<script>
+  type Opcion = { nombre: string; imagen: string; luz: string; dificultad: string; petFriendly: boolean };
+  const dataEl = document.getElementById("buscador-data")!;
+  const { opciones, whatsapp } = JSON.parse(dataEl.textContent || "{}") as { opciones: Opcion[]; whatsapp: string };
+
+  const estado: { luz?: string; tiempo?: string; mascota: boolean } = { mascota: false };
+
+  const grupos = document.querySelectorAll<HTMLElement>("[data-grupo]");
+  const mascotaBtn = document.getElementById("buscador-mascota")!;
+  const foto = document.getElementById("buscador-foto") as HTMLImageElement;
+  const placeholder = document.getElementById("buscador-placeholder")!;
+  const resultado = document.getElementById("buscador-resultado")!;
+  const resultadoNombre = document.getElementById("buscador-resultado-nombre")!;
+  const resultadoRazon = document.getElementById("buscador-resultado-razon")!;
+  const resultadoLink = document.getElementById("buscador-resultado-link") as HTMLAnchorElement;
+
+  const LUZ_TXT: Record<string, string> = { poca: "poca luz", media: "luz media", mucha: "mucha luz" };
+  const TIEMPO_TXT: Record<string, string> = {
+    facil: "no te pide mucho tiempo de dedicación",
+    intermedia: "pide un cuidado moderado",
+    experta: "se aprovecha con más tiempo de dedicación",
+  };
+
+  grupos.forEach((grupo) => {
+    const key = grupo.dataset.grupo as "luz" | "tiempo";
+    grupo.querySelectorAll<HTMLButtonElement>(".buscador-opt").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        grupo.querySelectorAll(".buscador-opt").forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        estado[key] = btn.dataset.valor;
+        actualizar();
+      });
+    });
+  });
+
+  mascotaBtn.addEventListener("click", () => {
+    estado.mascota = !estado.mascota;
+    mascotaBtn.setAttribute("aria-checked", String(estado.mascota));
+    mascotaBtn.classList.toggle("is-on", estado.mascota);
+    actualizar();
+  });
+
+  function actualizar() {
+    if (!estado.luz || !estado.tiempo) return;
+
+    const candidatos = estado.mascota ? opciones.filter((o) => o.petFriendly) : opciones;
+    const pool = candidatos.length ? candidatos : opciones;
+
+    let mejor = pool[0];
+    let mejorScore = -1;
+    for (const o of pool) {
+      let score = 0;
+      if (o.luz === estado.luz) score += 2;
+      if (o.dificultad === estado.tiempo) score += 1;
+      if (score > mejorScore) {
+        mejorScore = score;
+        mejor = o;
+      }
+    }
+
+    if (!mejor) return;
+    placeholder.classList.add("hidden");
+    resultado.classList.remove("hidden");
+    resultadoNombre.textContent = mejor.nombre;
+
+    let razon = `La elegimos porque se adapta a espacios con ${LUZ_TXT[estado.luz]} y ${TIEMPO_TXT[estado.tiempo]}.`;
+    if (estado.mascota) razon += " Además es segura si tenés mascotas en casa.";
+    resultadoRazon.textContent = razon;
+
+    resultadoLink.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(`¡Hola! Quería consultar disponibilidad de ${mejor.nombre} en Nativa Vivero.`)}`;
+
+    if (foto.src.split("/").pop() !== mejor.imagen.split("/").pop()) {
+      foto.style.opacity = "0";
+      setTimeout(() => {
+        foto.src = mejor.imagen;
+        foto.alt = mejor.nombre;
+        foto.style.opacity = "1";
+      }, 250);
+    }
+  }
+</script>
+
+<style>
+  .buscador-opt.is-active {
+    background-color: var(--color-clay);
+    border-color: var(--color-clay);
+    color: var(--color-ink);
+  }
+  #buscador-mascota.is-on {
+    background-color: var(--color-clay);
+  }
+  #buscador-mascota.is-on span {
+    transform: translateX(20px);
+  }
+  #buscador-mascota span {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+</style>

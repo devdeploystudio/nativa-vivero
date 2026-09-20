@@ -1,0 +1,141 @@
+---
+import { NAV_LINKS, SITE } from "../config/site";
+---
+
+<header class="sticky top-0 z-40 border-b border-hairline/80 bg-canvas/90 backdrop-blur">
+  <div class="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-5 py-3 sm:px-8">
+    <a href="/" class="flex items-center gap-2.5">
+      <img src="/logo-mark.png" alt="" aria-hidden="true" width="347" height="311" class="h-9 w-auto object-contain" />
+      <img src="/logo-wordmark.png" alt={SITE.nombre} width="543" height="210" class="h-6 w-auto object-contain" />
+    </a>
+
+    <nav class="hidden items-center gap-7 lg:flex" aria-label="Navegación principal">
+      {
+        NAV_LINKS.map((link) => (
+          <a href={link.href} class="nav-link font-body text-sm font-medium text-body transition-colors hover:text-ink">
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button
+      id="menu-toggle"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="flex h-10 w-10 items-center justify-center lg:hidden"
+    >
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line class="menu-toggle__line menu-toggle__line--top" x1="3" y1="6" x2="21" y2="6" />
+        <line class="menu-toggle__line menu-toggle__line--middle" x1="3" y1="12" x2="21" y2="12" />
+        <line class="menu-toggle__line menu-toggle__line--bottom" x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="mobile-backdrop" class="mobile-backdrop lg:hidden"></div>
+
+  <nav id="mobile-menu" class="mobile-menu lg:hidden" aria-label="Navegación mobile">
+    <div class="flex flex-col gap-1 px-5 py-4 sm:px-8">
+      {
+        NAV_LINKS.map((link) => (
+          <a href={link.href} class="rounded-lg px-2 py-2.5 font-body text-base font-medium text-ink hover:bg-surface-soft">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle")!;
+  const menu = document.getElementById("mobile-menu")!;
+  const backdrop = document.getElementById("mobile-backdrop")!;
+
+  function setOpen(isOpen: boolean) {
+    menu.classList.toggle("is-open", isOpen);
+    backdrop.classList.toggle("is-open", isOpen);
+    toggle.classList.toggle("is-open", isOpen);
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
+  }
+
+  toggle.addEventListener("click", () => setOpen(!menu.classList.contains("is-open")));
+  backdrop.addEventListener("click", () => setOpen(false));
+  menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+</script>
+
+<style>
+  /* Hamburguesa → X (mismo patrón que el resto de los sitios de Deploy). */
+  .menu-toggle__line {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.2s ease;
+  }
+  #menu-toggle.is-open .menu-toggle__line--top {
+    transform: translateY(6px) rotate(45deg);
+  }
+  #menu-toggle.is-open .menu-toggle__line--middle {
+    opacity: 0;
+  }
+  #menu-toggle.is-open .menu-toggle__line--bottom {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Posicionado absoluto (no en el flujo normal): se superpone sobre el
+     contenido de abajo en vez de empujarlo hacia abajo al abrirse. */
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background: var(--color-canvas);
+    border-top: 1px solid var(--color-hairline);
+    box-shadow: 0 20px 40px -16px rgba(20, 20, 15, 0.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0.22s;
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0s;
+  }
+
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    top: 100%;
+    z-index: 25;
+    background: rgba(20, 20, 15, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .mobile-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-toggle__line,
+    .mobile-menu,
+    .mobile-backdrop {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

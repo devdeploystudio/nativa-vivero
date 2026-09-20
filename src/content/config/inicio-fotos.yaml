@@ -1,0 +1,11 @@
+inicioFotos:
+  id: "inicio-fotos"
+  slides:
+    - imagen: "/hero/01-fachada.jpg"
+      alt: "Entrada de Nativa Vivero, con el cartel de la marca entre plantas"
+    - imagen: "/hero/02-invernadero.jpg"
+      alt: "Pasillo del invernadero con mesadas de madera llenas de plantas en macetas de cerámica"
+    - imagen: "/hero/03-terraza-atardecer.jpg"
+      alt: "Terraza con plantas de exterior al atardecer"
+    - imagen: "/hero/04-living.jpg"
+      alt: "Living decorado con distintas plantas de interior en macetas de cerámica"

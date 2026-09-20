@@ -1,0 +1,6 @@
+orden: 1
+nombre: "Sansevieria"
+imagen: "/plantas/sansevieria.jpg"
+luz: "poca"
+dificultad: "facil"
+categorias: ["interior"]

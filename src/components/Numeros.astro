@@ -1,0 +1,57 @@
+---
+import { getEntry } from "astro:content";
+
+const n = (await getEntry("configNumeros", "numeros"))!.data;
+---
+
+<section class="bg-forest py-10 lg:py-14">
+  <div class="mx-auto grid max-w-[90rem] grid-cols-2 gap-8 px-5 sm:px-8 lg:grid-cols-4">
+    {
+      n.items.map((item) => (
+        <div class="reveal-on-scroll text-center">
+          <p class="font-display text-4xl text-canvas sm:text-5xl">
+            <span class="numero-contador" data-target={item.numero}>
+              0
+            </span>
+            {item.sufijo}
+          </p>
+          <p class="mt-2 font-body text-xs uppercase tracking-wide text-canvas/60 sm:text-sm">{item.etiqueta}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  const contadores = document.querySelectorAll<HTMLElement>(".numero-contador");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        const target = parseInt(el.dataset.target ?? "0", 10);
+        io.unobserve(el);
+
+        if (reduceMotion) {
+          el.textContent = String(target);
+          continue;
+        }
+
+        const duration = 1400;
+        const start = performance.now();
+        function tick(now: number) {
+          const progress = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = String(Math.round(eased * target));
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    },
+    { threshold: 0.4 },
+  );
+
+  contadores.forEach((el) => io.observe(el));
+</script>

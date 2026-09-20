@@ -1,0 +1,12 @@
+orden: 1
+nombre: "Redonda clásica"
+descripcion: "Nuestra forma más pedida: base redondeada y borde sin esmaltar, apta para cualquier ambiente."
+colores:
+  - nombre: "Crema"
+    imagen: "/macetas/maceta-01-redonda-crema.jpg"
+  - nombre: "Terracota"
+    imagen: "/macetas/maceta-01-redonda-terracota.jpg"
+  - nombre: "Verde salvia"
+    imagen: "/macetas/maceta-01-redonda-salvia.jpg"
+  - nombre: "Gris carbón"
+    imagen: "/macetas/maceta-01-redonda-carbon.jpg"

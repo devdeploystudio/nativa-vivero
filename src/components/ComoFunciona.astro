@@ -1,0 +1,47 @@
+---
+import { getEntry } from "astro:content";
+
+const c = (await getEntry("configComoFunciona", "comoFunciona"))!.data;
+
+// Ícono decorativo por posición (no elegible desde el panel): no hay un
+// dibujo "correcto" por paso, solo ayuda a distinguirlos de un vistazo.
+const ICONOS = [
+  '<path d="M11 11m-6 0a6 6 0 1 0 12 0a6 6 0 1 0-12 0"/><path d="M20 20l-4.5-4.5" stroke-linecap="round"/>',
+  '<path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>',
+  '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke-linecap="round"/>',
+  '<path d="M12 21s-7-4.35-9.5-9C.8 8.1 2.6 4.5 6 4.5c2 0 3.5 1.2 4.5 2.7C11.5 5.7 13 4.5 15 4.5c3.4 0 5.2 3.6 3.5 7.5-2.5 4.65-9.5 9-9.5 9Z" stroke-linejoin="round"/>',
+];
+
+const pasos = c.pasos.map((p, i) => ({ ...p, icono: ICONOS[i % ICONOS.length] }));
+---
+
+<section class="mx-auto max-w-[90rem] px-5 py-12 sm:px-8 lg:py-20">
+  <div class="mx-auto max-w-2xl text-center">
+    <p class="reveal-on-scroll font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay-active">Proceso</p>
+    <h2 class="reveal-on-scroll section-rule mx-auto mt-3 font-display text-3xl text-ink sm:text-4xl">{c.titulo}</h2>
+    <p class="reveal-on-scroll mt-4 font-body text-base text-muted">{c.texto}</p>
+  </div>
+
+  <ol class="relative mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+    <div class="pasos-linea absolute left-0 right-0 top-7 hidden lg:block" aria-hidden="true"></div>
+    {
+      pasos.map((p, i) => (
+        <li class="reveal-on-scroll relative flex flex-col items-center px-2 text-center">
+          <span
+            class="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-forest text-canvas"
+            set:html={`<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">${p.icono}</svg>`}
+          />
+          <h3 class="mt-4 font-display text-lg text-ink">{p.titulo}</h3>
+          <p class="mt-1.5 max-w-[16rem] font-body text-sm text-muted">{p.texto}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .pasos-linea {
+    height: 2px;
+    background: repeating-linear-gradient(to right, var(--color-hairline) 0 8px, transparent 8px 14px);
+  }
+</style>

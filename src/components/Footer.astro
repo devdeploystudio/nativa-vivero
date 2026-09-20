@@ -1,0 +1,89 @@
+---
+import { NAV_LINKS, SITE, INSTAGRAM_URL, WHATSAPP_NUMBER, ESLOGAN } from "../config/site";
+import { buildConsultaGeneralLink, formatWhatsappDisplay } from "../lib/whatsapp";
+
+const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
+const waDisplay = formatWhatsappDisplay(WHATSAPP_NUMBER);
+const igHandle = "@" + INSTAGRAM_URL.replace(/\/$/, "").split("/").pop();
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-hairline bg-surface-soft">
+  <div class="mx-auto max-w-[90rem] px-5 py-14 sm:px-8 lg:py-16">
+    <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr]">
+      <div>
+        <a href="/" class="flex items-center gap-2.5">
+          <img src="/logo-mark.png" alt="" aria-hidden="true" width="347" height="311" class="h-11 w-auto object-contain" />
+          <img src="/logo-wordmark.png" alt={SITE.nombre} width="543" height="210" class="h-7 w-auto object-contain" />
+        </a>
+        <p class="mt-4 max-w-sm font-body text-sm leading-relaxed text-muted">{ESLOGAN}</p>
+      </div>
+
+      <div>
+        <p class="font-body text-sm font-semibold uppercase tracking-wide text-ink">Navegación</p>
+        <ul class="mt-4 flex flex-col gap-2.5">
+          {
+            NAV_LINKS.map((link) => (
+              <li>
+                <a href={link.href} class="font-body text-sm text-muted transition-colors hover:text-ink">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-body text-sm font-semibold uppercase tracking-wide text-ink">Contacto</p>
+        <ul class="mt-4 flex flex-col gap-2.5">
+          <li>
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-ubicacion="footer"
+              class="font-body text-sm text-muted transition-colors hover:text-ink"
+            >
+              {waDisplay}
+            </a>
+          </li>
+          <li>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" class="font-body text-sm text-muted transition-colors hover:text-ink">
+              {igHandle}
+            </a>
+          </li>
+          <li>
+            <a href="/contacto" class="font-body text-sm text-muted transition-colors hover:text-ink">Ruta 25, Escobar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-2 border-t border-hairline pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+      <span>© {year} {SITE.nombre}. Marca ficticia de demostración.</span>
+      <span class="footer__credit inline-flex items-center gap-1.5">
+        Sitio de prueba realizado por
+        <a href="https://deploystudio.com.ar/" target="_blank" rel="noopener noreferrer">
+          <img class="footer__deploy-logo" src="/deploy-logo.png" alt="Deploy" width="900" height="200" loading="lazy" />
+        </a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Footer claro: el logo de Deploy se aplana a negro sólido (sin el verde)
+     para que quede como una marca de agua discreta, igual que en el resto
+     de los sitios de ejemplo. */
+  .footer__deploy-logo {
+    height: 13px;
+    width: auto;
+    filter: brightness(0);
+    opacity: 0.75;
+    transition: opacity 0.25s ease;
+  }
+  .footer__credit:hover .footer__deploy-logo {
+    opacity: 1;
+  }
+</style>

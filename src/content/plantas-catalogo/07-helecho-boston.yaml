@@ -1,0 +1,6 @@
+orden: 7
+nombre: "Helecho Boston"
+imagen: "/plantas/helecho-boston.jpg"
+luz: "media"
+dificultad: "intermedia"
+categorias: ["interior", "colgante", "pet-friendly"]

@@ -1,0 +1,112 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import WhatsappFloat from "../components/WhatsappFloat.astro";
+import { SITE } from "../config/site";
+
+import newsreader from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
+import newsreaderItalic from "@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url";
+import workSans from "@fontsource-variable/work-sans/files/work-sans-latin-wght-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  tituloConGuion?: boolean;
+}
+
+const {
+  title,
+  description = SITE.descripcion,
+  image = "/seo/og-image.jpg",
+  noindex = false,
+  tituloConGuion = true,
+} = Astro.props;
+
+const pageTitle = tituloConGuion ? `${SITE.nombre} - ${title}` : title === SITE.nombre ? title : `${title}, ${SITE.nombre}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "GardenStore",
+  name: SITE.nombre,
+  description: SITE.descripcion,
+  url: Astro.site?.href,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Escobar",
+    addressRegion: "Buenos Aires",
+    addressCountry: "AR",
+  },
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" as="font" type="font/woff2" href={newsreader} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={newsreaderItalic} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={workSans} crossorigin />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#bd7b4f" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:site_name" content={SITE.nombre} />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsappFloat />
+
+    <script>
+      // Reveal genérico: cualquier elemento con .reveal-on-scroll se anima
+      // una sola vez al entrar en pantalla. Respeta prefers-reduced-motion
+      // (el CSS ya anula la transición ahí, esto solo agrega la clase).
+      const revealEls = document.querySelectorAll<HTMLElement>(".reveal-on-scroll");
+      if (revealEls.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+        );
+        revealEls.forEach((el, i) => {
+          el.style.setProperty("--reveal-delay", `${Math.min(i % 4, 3) * 80}ms`);
+          io.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>

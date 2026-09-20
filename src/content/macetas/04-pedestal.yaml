@@ -1,0 +1,12 @@
+orden: 4
+nombre: "Con pedestal"
+descripcion: "Con pedestal, para darle altura a una planta chica sobre una mesa o repisa."
+colores:
+  - nombre: "Crema"
+    imagen: "/macetas/maceta-04-pedestal-crema.jpg"
+  - nombre: "Verde salvia"
+    imagen: "/macetas/maceta-04-pedestal-salvia.jpg"
+  - nombre: "Terracota"
+    imagen: "/macetas/maceta-04-pedestal-terracota.jpg"
+  - nombre: "Gris carbón"
+    imagen: "/macetas/maceta-04-pedestal-carbon.jpg"

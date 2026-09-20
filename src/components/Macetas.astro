@@ -1,0 +1,100 @@
+---
+import { getEntry, getCollection } from "astro:content";
+
+const c = (await getEntry("configCatalogoMacetas", "catalogoMacetas"))!.data;
+const macetas = (await getCollection("macetas")).sort((a, b) => a.data.orden - b.data.orden);
+
+// Un color por nombre, para pintar el globito sin depender de que el
+// panel elija también un color de UI (el nombre del color YA es el dato,
+// el círculo es solo una ayuda visual). Si aparece un color nuevo que no
+// está en este mapa, el globito cae a un gris neutro en vez de romper.
+const SWATCH: Record<string, string> = {
+  Crema: "#e8dcc4",
+  Terracota: "#c17a4e",
+  "Verde salvia": "#8a9a78",
+  "Gris carbón": "#4a4d4a",
+};
+---
+
+<section class="bg-surface-soft py-12 lg:py-20">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+  <div class="mx-auto max-w-2xl text-center">
+    <p class="reveal-on-scroll font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay-active">{c.kicker}</p>
+    <h2 class="reveal-on-scroll section-rule mx-auto mt-3 font-display text-3xl text-ink sm:text-4xl">{c.titulo}</h2>
+    <p class="reveal-on-scroll mt-4 font-body text-base text-muted">{c.texto}</p>
+  </div>
+
+  <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      macetas.map((m) => {
+        const d = m.data;
+        return (
+          <article class="maceta-card reveal-on-scroll overflow-hidden rounded-2xl border border-hairline bg-surface">
+            <div class="aspect-square overflow-hidden bg-surface-soft">
+              <img data-maceta-foto src={d.colores[0].imagen} alt={`${d.nombre} en ${d.colores[0].nombre}`} width="700" height="700" loading="lazy" class="h-full w-full object-cover transition-opacity duration-300" />
+            </div>
+            <div class="p-5">
+              <h3 class="font-display text-xl text-ink">{d.nombre}</h3>
+              <p class="mt-1.5 font-body text-sm leading-relaxed text-muted">{d.descripcion}</p>
+
+              {d.colores.length > 1 && (
+                <div class="mt-4 flex items-center gap-2.5" role="group" aria-label={`Colores disponibles para ${d.nombre}`}>
+                  {d.colores.map((color, i) => (
+                    <button
+                      type="button"
+                      class="maceta-swatch h-7 w-7 rounded-full border-2 transition-transform"
+                      class:list={[{ "is-active": i === 0 }]}
+                      style={`background-color:${SWATCH[color.nombre] ?? "#b8b3a6"}`}
+                      data-imagen={color.imagen}
+                      data-alt={`${d.nombre} en ${color.nombre}`}
+                      aria-label={color.nombre}
+                      title={color.nombre}
+                    />
+                  ))}
+                </div>
+              )}
+              <p data-maceta-color-label class="mt-2 font-body text-xs text-muted">
+                {d.colores[0].nombre}
+                {d.colores.length === 1 && " (color único)"}
+              </p>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+  </div>
+</section>
+
+<style>
+  .maceta-swatch {
+    border-color: transparent;
+  }
+  .maceta-swatch.is-active {
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 2px var(--color-canvas) inset;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".maceta-card").forEach((card) => {
+    const foto = card.querySelector<HTMLImageElement>("[data-maceta-foto]");
+    const label = card.querySelector<HTMLElement>("[data-maceta-color-label]");
+    const swatches = Array.from(card.querySelectorAll<HTMLButtonElement>(".maceta-swatch"));
+
+    swatches.forEach((swatch) => {
+      swatch.addEventListener("click", () => {
+        if (!foto) return;
+        swatches.forEach((s) => s.classList.remove("is-active"));
+        swatch.classList.add("is-active");
+        foto.style.opacity = "0";
+        setTimeout(() => {
+          foto.src = swatch.dataset.imagen ?? foto.src;
+          foto.alt = swatch.dataset.alt ?? foto.alt;
+          foto.style.opacity = "1";
+        }, 150);
+        if (label) label.textContent = swatch.title;
+      });
+    });
+  });
+</script>

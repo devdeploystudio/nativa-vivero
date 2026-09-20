@@ -1,0 +1,6 @@
+orden: 8
+nombre: "Ficus Elastica"
+imagen: "/plantas/ficus-elastica.jpg"
+luz: "mucha"
+dificultad: "facil"
+categorias: ["interior"]

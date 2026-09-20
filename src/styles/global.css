@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@import "@fontsource-variable/newsreader";
+@import "@fontsource-variable/newsreader/wght-italic.css";
+@import "@fontsource-variable/work-sans";
+
+@theme {
+  /* Paleta cálida de vivero: crema de invernadero, terracota de macetas,
+     verde profundo de follaje. Un solo acento de marca (terracota), igual
+     que Claude/Airbnb en la guía de referencia — el verde queda reservado
+     para tipografía/detalle, no compite como segundo acento. */
+  --color-canvas: #f7f2e7;
+  --color-surface: #ffffff;
+  --color-surface-soft: #efe6d3;
+  --color-ink: #262a1e;
+  --color-body: #40473a;
+  --color-muted: #7c8170;
+  --color-hairline: #e1d7bf;
+  --color-clay: #bd7b4f;
+  --color-clay-active: #a2653c;
+  --color-forest: #3a4a30;
+  --color-forest-deep: #232c1d;
+
+  --font-display: "Newsreader Variable", ui-serif, Georgia, serif;
+  --font-body: "Work Sans Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-body);
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-clay-active);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-clay) 35%, transparent);
+    color: var(--color-ink);
+  }
+
+  html {
+    scrollbar-color: var(--color-clay-active) var(--color-canvas);
+  }
+
+  /* ---------- Utilidades compartidas por varios bloques ---------- */
+
+  .btn-press {
+    transition:
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.2s ease;
+  }
+  .btn-press:hover {
+    transform: translateY(-1px);
+  }
+  .btn-press:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  /* Reveal genérico al entrar en pantalla (fade + subida), con pequeño
+     stagger entre hermanos vía --reveal-delay (seteado inline por sección). */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  main h2.reveal-on-scroll::after,
+  .section-rule::after {
+    content: "";
+    display: block;
+    width: 2.75rem;
+    height: 3px;
+    margin-top: 0.85rem;
+    border-radius: 999px;
+    background: var(--color-clay);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 220ms;
+  }
+  main h2.reveal-on-scroll.is-revealed::after,
+  .section-rule.is-revealed::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

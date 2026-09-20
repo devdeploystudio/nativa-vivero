@@ -1,0 +1,54 @@
+---
+import { getEntry } from "astro:content";
+
+const g = (await getEntry("configGaleria", "galeria"))!.data;
+---
+
+<section id="galeria-scroll" class="relative" style={`height: ${(g.slides.length + 1) * 100}svh`}>
+  <div class="sticky top-0 h-[100svh] overflow-hidden bg-forest-deep">
+    <div id="galeria-track" class="flex h-full w-max will-change-transform">
+      <div class="galeria-panel flex h-full w-screen shrink-0 flex-col justify-center px-6 sm:px-10 lg:px-16">
+        <p class="font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay">{g.kicker}</p>
+        <h2 class="mt-4 max-w-md font-display text-3xl leading-tight text-canvas sm:text-4xl">{g.titulo}</h2>
+        <p class="mt-6 font-body text-sm tracking-wide text-canvas/60">Seguí bajando ↓</p>
+      </div>
+
+      {
+        g.slides.map((slide) => (
+          <div class="galeria-panel relative flex h-full w-screen shrink-0 items-end overflow-hidden">
+            <img src={slide.imagen} alt={slide.titulo} width="1800" height="1200" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/5 to-transparent" />
+            <p class="relative z-10 p-6 font-display text-2xl italic text-canvas sm:p-10 sm:text-3xl">{slide.titulo}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById("galeria-scroll");
+  const track = document.getElementById("galeria-track");
+  if (section && track) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      // Sin scroll pineado: se deja como una fila que se puede scrollear
+      // horizontalmente a mano, sin animación forzada por el scroll vertical.
+      section.style.height = "auto";
+      track.style.overflowX = "auto";
+      track.parentElement?.style.setProperty("position", "static");
+    } else {
+      const update = () => {
+        const rect = section.getBoundingClientRect();
+        const scrollable = section.offsetHeight - window.innerHeight;
+        const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+        const maxTranslate = track.scrollWidth - window.innerWidth;
+        track.style.transform = `translateX(-${progress * maxTranslate}px)`;
+      };
+      update();
+      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update);
+    }
+  }
+</script>

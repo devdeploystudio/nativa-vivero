@@ -1,0 +1,13 @@
+comoFunciona:
+  id: "como-funciona"
+  titulo: "¿Cómo comprás?"
+  texto: "Sin carrito ni pagos online: coordinamos todo por WhatsApp, como en cualquier vivero de barrio."
+  pasos:
+    - titulo: "Elegís"
+      texto: "Mirá el catálogo o usá el buscador para encontrar la planta que se adapta a tu espacio."
+    - titulo: "Consultás"
+      texto: "Nos escribís por WhatsApp y te confirmamos stock, tamaño disponible y precio actualizado."
+    - titulo: "Coordinamos"
+      texto: "Retirás en el vivero (Escobar) o coordinamos envío a domicilio en Zona Norte."
+    - titulo: "Disfrutás"
+      texto: "Te vas con la maceta de cerámica incluida y nuestros consejos de cuidado para esa especie puntual."

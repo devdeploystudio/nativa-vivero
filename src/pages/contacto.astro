@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+import PageBanner from "../components/PageBanner.astro";
+import Ubicacion from "../components/Ubicacion.astro";
+
+const c = (await getEntry("configContacto", "contacto"))!.data;
+---
+
+<Layout title="Contacto" description="Escribinos por WhatsApp o visitá Nativa Vivero en Escobar, Buenos Aires.">
+  <PageBanner imagen={c.imagen} kicker={c.kicker} titulo={c.titulo} texto={c.texto} />
+  <Ubicacion />
+</Layout>

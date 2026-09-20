@@ -1,0 +1,9 @@
+orden: 2
+nombre: "Ficus Lyrata"
+nombreCientifico: "Ficus lyrata"
+imagen: "/plantas/ficus-lyrata.jpg"
+descripcion: "Conocida como \"higuera de hoja de violín\" por la forma de sus hojas, grandes y brillantes. Es la planta de estatura para un living o una oficina: necesita luz abundante y estabilidad, sin moverla de lugar seguido."
+luz: "mucha"
+riego: "moderado"
+dificultad: "intermedia"
+petFriendly: false

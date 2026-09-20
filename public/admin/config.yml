@@ -1,0 +1,454 @@
+backend:
+  name: github
+  repo: devdeploystudio/nativa-vivero
+  branch: main
+  # Proxy de login por GitHub OAuth (Cloudflare Worker sveltia-cms-auth).
+  # No está activo todavía para este dominio de ejemplo — no hace falta
+  # para probar el panel en local, ver la nota de abajo.
+  base_url: https://sveltia-cms-auth.contact-deploystudio.workers.dev
+
+# Cómo se prueba este panel EN LOCAL (npm run dev), sin login de GitHub:
+# Sveltia (a diferencia de Decap/Netlify CMS) no usa `local_backend` ni un
+# proxy tipo `decap-server` — esa opción quedó deprecada y la ignora con un
+# warning en consola si está presente, por eso no está declarada acá. En su
+# lugar, con `backend.name: github` ya configurado como arriba, la propia
+# pantalla de login de Sveltia muestra un botón "Work with Local Repository"
+# (abajo del botón de GitHub): al tocarlo, el navegador pide elegir la
+# carpeta RAÍZ de este proyecto (File System Access API) y a partir de ahí
+# edita y guarda directo en los archivos locales, sin ningún login. Solo
+# funciona en navegadores basados en Chromium (Chrome, Edge, Brave — no
+# Firefox ni Safari). En Brave hay que habilitar a mano el flag
+# brave://flags/#file-system-access-api. En el sitio ya publicado, ese botón
+# no sirve de nada para un visitante: ahí se usa el login real de GitHub.
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Sin esto, Sveltia muestra una vista previa en vivo al lado del formulario
+# y los campos de texto quedan comprimidos a la mitad del ancho. Ninguna
+# colección de este panel usa esa vista previa, así que queda desactivada
+# global para que el formulario ocupe todo el ancho.
+editor:
+  preview: false
+
+# El orden de la lista de acá abajo es a propósito el mismo orden en que
+# esos bloques aparecen scrolleando la home real, de arriba a abajo —
+# así cualquiera puede ir bajando por el sitio y encontrar cada sección en
+# el mismo orden en el panel, sin tener que adivinar dónde quedó cada cosa.
+collections:
+  # El bloque "Inicio" (home) está partido en varias carpetitas chicas, una
+  # por cada parte de la pantalla — así editar el título de la portada
+  # nunca mezcla en la misma pantalla las fotos, ni con la franja de
+  # beneficios. Todas comparten el prefijo "🏠 Inicio →" para que se vean
+  # agrupadas una al lado de la otra en la lista de la izquierda (Sveltia
+  # no soporta carpetas anidadas de verdad, esto es lo más parecido).
+  - name: "config-inicio-portada-texto"
+    label: "🏠 Inicio → Portada (texto)"
+    description: "El texto de la primera pantalla de la home: la frase chica de arriba, el título grande, el párrafo y el texto de los 2 botones."
+    files:
+      - name: "inicio-hero"
+        label: "Texto de la portada"
+        file: "src/content/config/inicio-hero.yaml"
+        fields:
+          - label: "Portada"
+            name: "inicioHero"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "inicio-hero" }
+              - { label: "Título principal", name: "titulo", widget: "text" }
+              - { label: "Párrafo de abajo", name: "bajada", widget: "text" }
+              - { label: "Texto del botón principal", name: "ctaPrincipalTexto", widget: "string" }
+              - { label: "Texto del botón secundario", name: "ctaSecundarioTexto", widget: "string" }
+
+  - name: "config-inicio-portada-fotos"
+    label: "🏠 Inicio → Portada (fotos)"
+    description: "Las fotos que van pasando solas en la primera pantalla de la home. Se pueden agregar, borrar y reordenar arrastrando."
+    files:
+      - name: "inicio-fotos"
+        label: "Fotos de la portada"
+        file: "src/content/config/inicio-fotos.yaml"
+        fields:
+          - label: "Fotos"
+            name: "inicioFotos"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "inicio-fotos" }
+              - label: "Fotos (van pasando solas)"
+                name: "slides"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando."
+                summary: "{{fields.alt}}"
+                fields:
+                  - { label: "Foto", name: "imagen", widget: "image", media_folder: "/public/hero", public_folder: "/hero" }
+                  - { label: "Descripción (para lectores de pantalla)", name: "alt", widget: "string" }
+
+  - name: "plantas-destacadas"
+    label: "🪴 Plantas destacadas"
+    label_singular: "Planta destacada"
+    description: "Las plantas con pantalla propia en la home (foto grande + descripción). Se pueden agregar, borrar y reordenar arrastrando."
+    folder: "src/content/plantas-destacadas"
+    create: true
+    delete: true
+    extension: "yaml"
+    format: "yaml"
+    identifier_field: nombre
+    reorder: { key: orden }
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Nombre científico", name: "nombreCientifico", widget: "string" }
+      - { label: "Foto", name: "imagen", widget: "image", media_folder: "/public/plantas", public_folder: "/plantas" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - label: "Luz"
+        name: "luz"
+        widget: "select"
+        options:
+          - { label: "Poca luz", value: "poca" }
+          - { label: "Luz media", value: "media" }
+          - { label: "Mucha luz", value: "mucha" }
+      - label: "Riego"
+        name: "riego"
+        widget: "select"
+        options:
+          - { label: "Bajo", value: "bajo" }
+          - { label: "Moderado", value: "moderado" }
+          - { label: "Frecuente", value: "frecuente" }
+      - label: "Dificultad"
+        name: "dificultad"
+        widget: "select"
+        options:
+          - { label: "Fácil", value: "facil" }
+          - { label: "Intermedia", value: "intermedia" }
+          - { label: "Experta", value: "experta" }
+      - { label: "¿Es pet-friendly?", name: "petFriendly", widget: "boolean", default: false }
+
+  - name: "config-buscador"
+    label: "🔎 Encontrá tu planta"
+    description: "El texto del bloque \"Encontrá tu planta ideal\" (el buscador interactivo). Las preguntas y opciones del buscador en sí son parte del diseño, no se editan acá."
+    files:
+      - name: "buscador"
+        label: "Textos del buscador"
+        file: "src/content/config/buscador.yaml"
+        fields:
+          - label: "Buscador"
+            name: "buscador"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "buscador" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Texto del link de resultado", name: "ctaTexto", widget: "string" }
+
+  - name: "config-galeria"
+    label: "📸 Galería"
+    description: "Las fotos del vivero que se recorren scrolleando (con sus títulos). Se pueden agregar, borrar y reordenar arrastrando."
+    files:
+      - name: "galeria"
+        label: "Galería"
+        file: "src/content/config/galeria.yaml"
+        fields:
+          - label: "Galería"
+            name: "galeria"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "galeria" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título (primer panel)", name: "titulo", widget: "text" }
+              - label: "Fotos"
+                name: "slides"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando."
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { label: "Foto", name: "imagen", widget: "image", media_folder: "/public/galeria", public_folder: "/galeria" }
+                  - { label: "Título", name: "titulo", widget: "string" }
+
+  - name: "config-guia-cuidados"
+    label: "🌤️ Guía de cuidados"
+    description: "Las preguntas y respuestas de la guía de cuidados (acordeón). Se pueden agregar, borrar y reordenar arrastrando."
+    files:
+      - name: "guia-cuidados"
+        label: "Guía de cuidados"
+        file: "src/content/config/guia-cuidados.yaml"
+        fields:
+          - label: "Guía de cuidados"
+            name: "guiaCuidados"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "guia-cuidados" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Foto (al lado de las preguntas)", name: "imagen", widget: "image", media_folder: "/public/galeria", public_folder: "/galeria" }
+              - label: "Preguntas"
+                name: "items"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando. El ícono es del tema de la pregunta (elegí el que mejor represente el contenido)."
+                summary: "{{fields.pregunta}}"
+                fields:
+                  - label: "Ícono"
+                    name: "icono"
+                    widget: "select"
+                    hint: "Elegí de la lista, así el dibujo siempre queda prolijo."
+                    options:
+                      - { label: "Luz", value: "luz" }
+                      - { label: "Riego", value: "riego" }
+                      - { label: "Trasplante", value: "trasplante" }
+                      - { label: "Hojas", value: "hojas" }
+                      - { label: "Mascotas", value: "mascotas" }
+                  - { label: "Pregunta", name: "pregunta", widget: "string" }
+                  - { label: "Respuesta", name: "respuesta", widget: "text" }
+
+  - name: "testimonios"
+    label: "💬 Testimonios"
+    label_singular: "Testimonio"
+    description: "Los testimonios que van pasando solos en la home. Se pueden agregar, borrar y reordenar arrastrando."
+    folder: "src/content/testimonios"
+    create: true
+    delete: true
+    extension: "yaml"
+    format: "yaml"
+    identifier_field: nombre
+    reorder: { key: orden }
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Quién es (ej: \"Clienta en Nordelta\")", name: "rol", widget: "string" }
+      - { label: "Testimonio", name: "texto", widget: "text" }
+
+  - name: "config-numeros"
+    label: "🔢 Números"
+    description: "Las 4 cifras destacadas de la home. Se pueden agregar, borrar y reordenar arrastrando."
+    files:
+      - name: "numeros"
+        label: "Números"
+        file: "src/content/config/numeros.yaml"
+        fields:
+          - label: "Números"
+            name: "numeros"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "numeros" }
+              - label: "Cifras"
+                name: "items"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando."
+                summary: "{{fields.etiqueta}}"
+                fields:
+                  - { label: "Número", name: "numero", widget: "number", value_type: "int" }
+                  - { label: "Símbolo después del número (opcional, ej: \"+\")", name: "sufijo", widget: "string", required: false }
+                  - { label: "Descripción (ej: \"Años en Escobar\")", name: "etiqueta", widget: "string" }
+
+  - name: "config-como-funciona"
+    label: "🔁 Cómo funciona"
+    description: "Los pasos del proceso de compra. Se pueden agregar, borrar y reordenar arrastrando; se numeran solos."
+    files:
+      - name: "como-funciona"
+        label: "Cómo funciona"
+        file: "src/content/config/como-funciona.yaml"
+        fields:
+          - label: "Cómo funciona"
+            name: "comoFunciona"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "como-funciona" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Bajada", name: "texto", widget: "text" }
+              - label: "Pasos"
+                name: "pasos"
+                widget: "list"
+                hint: "Se pueden agregar, borrar y reordenar arrastrando. El número (01, 02...) lo pone el diseño solo según el orden."
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { label: "Título", name: "titulo", widget: "string" }
+                  - { label: "Texto", name: "texto", widget: "text" }
+
+  - name: "config-cta-final"
+    label: "🌿 Bloque final"
+    description: "El último cartel de la home (\"¿Le damos verde a tu espacio?\"), con su foto de fondo."
+    files:
+      - name: "cta-final"
+        label: "Bloque final"
+        file: "src/content/config/cta-final.yaml"
+        fields:
+          - label: "Bloque final"
+            name: "ctaFinal"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "cta-final" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Foto de fondo", name: "imagen", widget: "image", media_folder: "/public/hero", public_folder: "/hero" }
+
+  # Página aparte, accesible desde el menú del sitio ("Catálogo"). Plantas
+  # y macetas quedan como carpetitas separadas, mismo criterio que el resto
+  # del panel: una colección por bloque visible de la página.
+  - name: "config-catalogo-pagina"
+    label: "🌱 Catálogo → Portada"
+    description: "El título y la foto de fondo de arriba de todo, en la página \"Catálogo\"."
+    files:
+      - name: "catalogo-pagina"
+        label: "Portada de Catálogo"
+        file: "src/content/config/catalogo-pagina.yaml"
+        fields:
+          - label: "Portada"
+            name: "catalogoPagina"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "catalogo-pagina" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Foto de fondo", name: "imagen", widget: "image", media_folder: "/public/galeria", public_folder: "/galeria" }
+
+  - name: "config-catalogo-plantas"
+    label: "🌱 Catálogo → Plantas (texto)"
+    description: "El texto de arriba de la grilla de plantas, en la página \"Catálogo\"."
+    files:
+      - name: "catalogo-plantas"
+        label: "Texto de Plantas"
+        file: "src/content/config/catalogo-plantas.yaml"
+        fields:
+          - label: "Plantas"
+            name: "catalogoPlantas"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "catalogo-plantas" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+
+  - name: "plantas-catalogo"
+    label: "🌱 Catálogo → Plantas"
+    label_singular: "Planta del catálogo"
+    description: "Las plantas que aparecen en la grilla filtrable de la página \"Catálogo\". Se pueden agregar, borrar y reordenar arrastrando."
+    folder: "src/content/plantas-catalogo"
+    create: true
+    delete: true
+    extension: "yaml"
+    format: "yaml"
+    identifier_field: nombre
+    reorder: { key: orden }
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Foto", name: "imagen", widget: "image", media_folder: "/public/plantas", public_folder: "/plantas" }
+      - label: "Luz"
+        name: "luz"
+        widget: "select"
+        options:
+          - { label: "Poca luz", value: "poca" }
+          - { label: "Luz media", value: "media" }
+          - { label: "Mucha luz", value: "mucha" }
+      - label: "Dificultad"
+        name: "dificultad"
+        widget: "select"
+        options:
+          - { label: "Fácil", value: "facil" }
+          - { label: "Intermedia", value: "intermedia" }
+          - { label: "Experta", value: "experta" }
+      - label: "Categorías (para los filtros del catálogo)"
+        name: "categorias"
+        widget: "select"
+        multiple: true
+        hint: "Elegí todas las que correspondan. Definen en qué filtros del catálogo aparece esta planta."
+        options:
+          - { label: "Interior", value: "interior" }
+          - { label: "Exterior", value: "exterior" }
+          - { label: "Colgante", value: "colgante" }
+          - { label: "Con flor", value: "con-flor" }
+          - { label: "Pet-friendly", value: "pet-friendly" }
+
+  - name: "config-catalogo-macetas"
+    label: "🏺 Catálogo → Macetas (texto)"
+    description: "El texto de arriba de la grilla de macetas, en la página \"Catálogo\"."
+    files:
+      - name: "catalogo-macetas"
+        label: "Texto de Macetas"
+        file: "src/content/config/catalogo-macetas.yaml"
+        fields:
+          - label: "Macetas"
+            name: "catalogoMacetas"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "catalogo-macetas" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+
+  - name: "macetas"
+    label: "🏺 Catálogo → Macetas"
+    label_singular: "Maceta"
+    description: "Las macetas del catálogo. Cada una puede tener varios colores: se pueden agregar, borrar y reordenar arrastrando, tanto las macetas como sus colores."
+    folder: "src/content/macetas"
+    create: true
+    delete: true
+    extension: "yaml"
+    format: "yaml"
+    identifier_field: nombre
+    reorder: { key: orden }
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - label: "Colores disponibles"
+        name: "colores"
+        widget: "list"
+        hint: "La primera foto de la lista es la que se ve por default. Se pueden agregar, borrar y reordenar arrastrando."
+        summary: "{{fields.nombre}}"
+        fields:
+          - { label: "Nombre del color (ej: \"Verde salvia\")", name: "nombre", widget: "string" }
+          - { label: "Foto en ese color", name: "imagen", widget: "image", media_folder: "/public/macetas", public_folder: "/macetas" }
+
+  # Página aparte, accesible desde el menú del sitio ("Contacto").
+  - name: "config-contacto"
+    label: "📍 Contacto → Texto"
+    description: "El título y el texto de arriba de todo, en la página \"Contacto\"."
+    files:
+      - name: "contacto"
+        label: "Texto de Contacto"
+        file: "src/content/config/contacto.yaml"
+        fields:
+          - label: "Contacto"
+            name: "contacto"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "contacto" }
+              - { label: "Frase chica de arriba", name: "kicker", widget: "string" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Foto de fondo", name: "imagen", widget: "image", media_folder: "/public/galeria", public_folder: "/galeria" }
+
+  - name: "config-ubicacion"
+    label: "📍 Contacto → Dirección y mapa"
+    description: "La dirección, el horario y el mapa del vivero, en la página \"Contacto\"."
+    files:
+      - name: "ubicacion"
+        label: "Ubicación"
+        file: "src/content/config/ubicacion.yaml"
+        fields:
+          - label: "Ubicación"
+            name: "ubicacion"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "ubicacion" }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Dirección", name: "direccion", widget: "string" }
+              - { label: "Horario", name: "horario", widget: "text" }
+              - label: "Link del mapa"
+                name: "mapaEmbedUrl"
+                widget: "string"
+                hint: "Pegar acá el link \"Embed\" que da OpenStreetMap (Compartir → HTML) apuntando a la dirección del vivero."
+
+  - name: "config"
+    label: "⚙️ General"
+    description: "El eslogan de la marca y los datos de contacto (WhatsApp e Instagram) que se usan en todo el sitio."
+    files:
+      - name: "site"
+        label: "Configuración general"
+        file: "src/content/config/site.yaml"
+        fields:
+          - label: "Sitio"
+            name: "site"
+            widget: "object"
+            fields:
+              - { label: "ID (no tocar)", name: "id", widget: "hidden", default: "site" }
+              - { label: "Eslogan", name: "eslogan", widget: "string" }
+              - { label: "WhatsApp (solo números, con código de país, ej: 5491122334455)", name: "whatsappNumero", widget: "string", required: false }
+              - { label: "Instagram (link completo, ej: https://www.instagram.com/usuario/)", name: "instagramUrl", widget: "string", required: false }

@@ -1,0 +1,6 @@
+orden: 4
+nombre: "Zamioculcas"
+imagen: "/plantas/zamioculcas.jpg"
+luz: "poca"
+dificultad: "facil"
+categorias: ["interior"]

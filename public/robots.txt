@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /editor
+Disallow: /admin/
+
+Sitemap: https://nativavivero.example.com/sitemap-index.xml

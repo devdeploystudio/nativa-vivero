@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEntry } from "astro:content";
+import PageBanner from "../components/PageBanner.astro";
+import Catalogo from "../components/Catalogo.astro";
+import Macetas from "../components/Macetas.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+
+const c = (await getEntry("configCatalogoPagina", "catalogoPagina"))!.data;
+---
+
+<Layout title="Catálogo" description="Plantas y macetas disponibles en Nativa Vivero, vivero familiar en Escobar, Buenos Aires.">
+  <PageBanner imagen={c.imagen} kicker={c.kicker} titulo={c.titulo} texto={c.texto} />
+  <Catalogo />
+  <Macetas />
+  <CtaFinal />
+</Layout>

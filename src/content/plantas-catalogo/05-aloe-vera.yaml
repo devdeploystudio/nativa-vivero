@@ -1,0 +1,6 @@
+orden: 5
+nombre: "Aloe Vera"
+imagen: "/plantas/aloe-vera.jpg"
+luz: "mucha"
+dificultad: "facil"
+categorias: ["interior", "exterior"]

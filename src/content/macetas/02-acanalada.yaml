@@ -1,0 +1,6 @@
+orden: 2
+nombre: "Acanalada"
+descripcion: "Textura acanalada hecha a mano, un detalle distinto para plantas chicas o medianas."
+colores:
+  - nombre: "Terracota"
+    imagen: "/macetas/maceta-02-acanalada-terracota.jpg"

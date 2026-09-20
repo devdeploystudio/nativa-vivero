@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Página no encontrada" noindex>
+  <section class="mx-auto flex min-h-[60svh] max-w-xl flex-col items-center justify-center px-5 text-center">
+    <p class="font-display text-7xl italic text-clay-active">404</p>
+    <h1 class="mt-4 font-display text-2xl text-ink sm:text-3xl">No encontramos esta página</h1>
+    <p class="mt-3 font-body text-base text-muted">
+      Puede que el link esté roto o que la página ya no exista. Volvé al inicio para seguir mirando plantas.
+    </p>
+    <a href="/" class="btn-press mt-8 rounded-full bg-clay px-6 py-3 font-body text-sm font-semibold text-ink transition-colors hover:bg-clay-active">
+      Volver al inicio
+    </a>
+  </section>
+</Layout>

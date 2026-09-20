@@ -1,0 +1,26 @@
+---
+import { getEntry } from "astro:content";
+import { WHATSAPP_NUMBER } from "../config/site";
+import { buildConsultaGeneralLink } from "../lib/whatsapp";
+
+const c = (await getEntry("configCtaFinal", "ctaFinal"))!.data;
+const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
+---
+
+<section class="cta-banner relative flex min-h-[42svh] items-center justify-center overflow-hidden px-5 py-16 text-center">
+  <img src={c.imagen} alt="" aria-hidden="true" width="1672" height="941" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+  <div class="absolute inset-0 bg-forest-deep/70"></div>
+  <div class="reveal-on-scroll relative z-10 mx-auto max-w-xl">
+    <h2 class="font-display text-3xl leading-tight text-canvas sm:text-5xl">{c.titulo}</h2>
+    <p class="mt-5 font-body text-base text-canvas/80 sm:text-lg">{c.texto}</p>
+    <a
+      href={waLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-ubicacion="cta-final"
+      class="btn-press mt-8 inline-flex rounded-full bg-clay px-8 py-4 font-body text-sm font-semibold text-ink transition-colors hover:bg-clay-active"
+    >
+      Consultar por WhatsApp
+    </a>
+  </div>
+</section>

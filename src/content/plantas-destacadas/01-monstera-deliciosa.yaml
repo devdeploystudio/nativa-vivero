@@ -1,0 +1,9 @@
+orden: 1
+nombre: "Monstera Deliciosa"
+nombreCientifico: "Monstera deliciosa"
+imagen: "/plantas/monstera-deliciosa.jpg"
+descripcion: "La favorita para dar volumen a cualquier ambiente. Sus hojas grandes y perforadas crecen rápido cuando tienen buena luz, y con un tutor puede trepar varios metros."
+luz: "media"
+riego: "moderado"
+dificultad: "facil"
+petFriendly: false

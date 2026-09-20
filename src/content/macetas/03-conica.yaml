@@ -1,0 +1,12 @@
+orden: 3
+nombre: "Cónica alta"
+descripcion: "Silueta alta y cónica, ideal para plantas de porte grande como el Ficus Lyrata."
+colores:
+  - nombre: "Crema"
+    imagen: "/macetas/maceta-03-conica-crema.jpg"
+  - nombre: "Verde salvia"
+    imagen: "/macetas/maceta-03-conica-salvia.jpg"
+  - nombre: "Terracota"
+    imagen: "/macetas/maceta-03-conica-terracota.jpg"
+  - nombre: "Gris carbón"
+    imagen: "/macetas/maceta-03-conica-carbon.jpg"

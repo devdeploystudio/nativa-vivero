@@ -1,0 +1,9 @@
+orden: 4
+nombre: "Pilea Peperomioides"
+nombreCientifico: "Pilea peperomioides"
+imagen: "/plantas/pilea-peperomioides.jpg"
+descripcion: "La \"planta china del dinero\", con hojas redondas que parecen monedas. Fácil de cuidar y de multiplicar: los brotes que le salen en la base se pueden separar y regalar."
+luz: "media"
+riego: "bajo"
+dificultad: "facil"
+petFriendly: true

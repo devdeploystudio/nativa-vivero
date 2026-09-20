@@ -1,0 +1,6 @@
+orden: 5
+nombre: "Con plato"
+descripcion: "Incluye plato de cerámica a juego, lista para apoyar directo sobre cualquier superficie."
+colores:
+  - nombre: "Verde salvia"
+    imagen: "/macetas/maceta-05-plato-salvia.jpg"

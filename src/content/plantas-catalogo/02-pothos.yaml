@@ -1,0 +1,6 @@
+orden: 2
+nombre: "Pothos"
+imagen: "/plantas/pothos.jpg"
+luz: "media"
+dificultad: "facil"
+categorias: ["interior", "colgante"]

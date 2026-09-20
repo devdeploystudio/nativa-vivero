@@ -1,0 +1,11 @@
+galeria:
+  id: "galeria"
+  kicker: "Así es el vivero"
+  titulo: "Un espacio pensado para perderse entre plantas, con luz natural todo el año."
+  slides:
+    - imagen: "/galeria/01-invernadero-estantes.jpg"
+      titulo: "El invernadero"
+    - imagen: "/galeria/02-interior-tienda.jpg"
+      titulo: "Rincón de lectura y regalo"
+    - imagen: "/galeria/03-terraza-sillon.jpg"
+      titulo: "Terraza de exposición"
