@@ -1,0 +1,43 @@
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Permite además disparar el deploy a mano desde la pestaña "Actions" del
+  # repo (botón "Run workflow"), sin depender de un push nuevo.
+  workflow_dispatch:
+
+# Permisos mínimos que necesita el job para poder publicar en Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se dispara un push nuevo mientras el anterior todavía está
+# deployando, cancela el anterior — nunca conviene publicar una versión
+# vieja después de una más nueva por una carrera de builds.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Instalar, build y preparar el artifact de Pages
+        uses: withastro/action@v3
+        # No hace falta pasarle "path" ni "node-version": lee package.json
+        # (Astro en la raíz del repo) y el engines.node solo.
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

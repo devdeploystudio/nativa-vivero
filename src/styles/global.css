@@ -119,4 +119,73 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* ---------- Cursor de marca (hoja) ----------
+     Solo con mouse real: en touch (pointer: coarse) el navegador no lee
+     `cursor: none` de todos modos, pero igual se oculta el elemento del
+     cursor propio por las dudas (ver Cursor.astro, que ni corre su script
+     si `pointer: fine` no matchea). */
+  @media (pointer: fine) {
+    html {
+      cursor: none;
+    }
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"] {
+      cursor: none;
+    }
+  }
+
+  #brand-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    color: var(--color-ink);
+    transition: opacity 0.2s ease;
+  }
+
+  /* El giro/agrandado en hover vive en este hijo (con `scale`, nunca
+     `width`/`height`) para no forzar reflow en cada frame. */
+  .brand-cursor-visual {
+    display: block;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    transition:
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.2s ease;
+  }
+
+  body.brand-cursor-active #brand-cursor {
+    opacity: 1;
+  }
+  body.brand-cursor-on-dark .brand-cursor-visual {
+    color: var(--color-canvas);
+  }
+  body.brand-cursor-hover .brand-cursor-visual {
+    transform: translate(-50%, -50%) scale(1.4) rotate(-12deg);
+    color: var(--color-clay-active);
+  }
+  /* Sobre un botón ya de color arcilla, la hoja arcilla del hover se
+     pierde: se pinta blanca en su lugar. Va después de
+     `.brand-cursor-hover` para ganar cuando las dos clases están puestas
+     a la vez. */
+  body.brand-cursor-hover.brand-cursor-on-clay .brand-cursor-visual {
+    color: var(--color-canvas);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-cursor-visual {
+      transition-duration: 0.15s;
+    }
+  }
+  @media (pointer: coarse) {
+    #brand-cursor {
+      display: none;
+    }
+  }
 }

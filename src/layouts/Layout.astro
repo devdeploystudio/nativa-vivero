@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WhatsappFloat from "../components/WhatsappFloat.astro";
+import Cursor from "../components/Cursor.astro";
 import { SITE, withBase } from "../config/site";
 
 import newsreader from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
@@ -84,20 +85,21 @@ const jsonLd = {
     </main>
     <Footer />
     <WhatsappFloat />
+    <Cursor />
 
     <script>
       // Reveal genérico: cualquier elemento con .reveal-on-scroll se anima
-      // una sola vez al entrar en pantalla. Respeta prefers-reduced-motion
-      // (el CSS ya anula la transición ahí, esto solo agrega la clase).
+      // al entrar en pantalla, en cualquier dirección (bajando o subiendo)
+      // — y se vuelve a ocultar al salir, para que se repita cada vez que
+      // se cruza esa franja del viewport en vez de jugarse una sola vez.
+      // Respeta prefers-reduced-motion (el CSS ya anula la transición ahí,
+      // esto solo agrega/saca la clase).
       const revealEls = document.querySelectorAll<HTMLElement>(".reveal-on-scroll");
       if (revealEls.length) {
         const io = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-revealed");
-                io.unobserve(entry.target);
-              }
+              entry.target.classList.toggle("is-revealed", entry.isIntersecting);
             }
           },
           { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },

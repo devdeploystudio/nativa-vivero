@@ -1,0 +1,76 @@
+---
+// Cursor de marca: una hoja (el isotipo del vivero) en vez del puntero
+// clásico. Solo se activa con mouse real (pointer: fine); en touch queda
+// oculto por CSS (ver global.css) y este script no hace nada. Mismo patrón
+// que BrandCursor.astro en santilli-aparts, adaptado a la paleta de acá.
+---
+
+<div id="brand-cursor" aria-hidden="true">
+  <svg class="brand-cursor-visual" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 20c-1-5 1-13 12-15-1 9-5 13-12 15Z" />
+    <path d="M7.5 18.5 15 8" />
+  </svg>
+</div>
+
+<script>
+  const mq = window.matchMedia("(pointer: fine)");
+  if (mq.matches) {
+    const cursor = document.getElementById("brand-cursor");
+
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        document.body.classList.add("brand-cursor-active");
+        if (cursor) cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      },
+      { passive: true },
+    );
+
+    window.addEventListener("pointerleave", () => {
+      document.body.classList.remove("brand-cursor-active");
+    });
+
+    const HOVER_SELECTOR = 'a, button, input, select, textarea, [role="button"], .maceta-swatch';
+    // Secciones/fotos de fondo oscuro (footer no, es claro acá — pero el
+    // buscador, la galería pineada, los números y los banners con foto sí):
+    // la hoja por defecto es color ink y se volvía invisible ahí.
+    const DARK_BG_SELECTOR = ".bg-forest, .bg-forest-deep, .cta-banner, [data-cursor-dark]";
+    // Botones color arcilla: el hover normal pinta la hoja de arcilla, pero
+    // sobre un botón ya de ese color se pierde. Ahí se pinta blanca.
+    const CLAY_BG_SELECTOR = ".bg-clay";
+
+    document.addEventListener(
+      "pointerover",
+      (e) => {
+        const target = e.target as Element | null;
+        if (target?.closest(HOVER_SELECTOR)) {
+          document.body.classList.add("brand-cursor-hover");
+        }
+        if (target?.closest(DARK_BG_SELECTOR)) {
+          document.body.classList.add("brand-cursor-on-dark");
+        }
+        if (target?.closest(CLAY_BG_SELECTOR)) {
+          document.body.classList.add("brand-cursor-on-clay");
+        }
+      },
+      { passive: true },
+    );
+
+    document.addEventListener(
+      "pointerout",
+      (e) => {
+        const target = e.target as Element | null;
+        if (target?.closest(HOVER_SELECTOR)) {
+          document.body.classList.remove("brand-cursor-hover");
+        }
+        if (target?.closest(DARK_BG_SELECTOR)) {
+          document.body.classList.remove("brand-cursor-on-dark");
+        }
+        if (target?.closest(CLAY_BG_SELECTOR)) {
+          document.body.classList.remove("brand-cursor-on-clay");
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>
