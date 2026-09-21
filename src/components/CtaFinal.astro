@@ -1,6 +1,6 @@
 ---
 import { getEntry } from "astro:content";
-import { WHATSAPP_NUMBER } from "../config/site";
+import { WHATSAPP_NUMBER, withBase } from "../config/site";
 import { buildConsultaGeneralLink } from "../lib/whatsapp";
 
 const c = (await getEntry("configCtaFinal", "ctaFinal"))!.data;
@@ -8,7 +8,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
 ---
 
 <section class="cta-banner relative flex min-h-[42svh] items-center justify-center overflow-hidden px-5 py-16 text-center">
-  <img src={c.imagen} alt="" aria-hidden="true" width="1672" height="941" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+  <img src={withBase(c.imagen)} alt="" aria-hidden="true" width="1672" height="941" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
   <div class="absolute inset-0 bg-forest-deep/70"></div>
   <div class="reveal-on-scroll relative z-10 mx-auto max-w-xl">
     <h2 class="font-display text-3xl leading-tight text-canvas sm:text-5xl">{c.titulo}</h2>

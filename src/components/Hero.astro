@@ -1,6 +1,6 @@
 ---
 import { getEntry } from "astro:content";
-import { WHATSAPP_NUMBER } from "../config/site";
+import { WHATSAPP_NUMBER, withBase } from "../config/site";
 import { buildConsultaGeneralLink } from "../lib/whatsapp";
 
 const texto = (await getEntry("configInicioHero", "inicioHero"))!.data;
@@ -15,7 +15,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
         <div
           class="hero-slide absolute inset-0"
           class:list={[{ "is-active": i === 0 }]}
-          style={`background-image: linear-gradient(180deg, rgba(15,18,12,0.5) 0%, rgba(15,18,12,0.55) 55%, rgba(10,12,8,0.9) 100%), url('${slide.imagen}')`}
+          style={`background-image: linear-gradient(180deg, rgba(15,18,12,0.5) 0%, rgba(15,18,12,0.55) 55%, rgba(10,12,8,0.9) 100%), url('${withBase(slide.imagen)}')`}
           role="img"
           aria-label={slide.alt}
         />
@@ -25,7 +25,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
 
   <div class="relative z-10 mx-auto w-full max-w-[90rem] px-5 pt-12 sm:px-8">
     <img
-      src="/logo-mark-white.png"
+      src={withBase("/logo-mark-white.png")}
       alt=""
       aria-hidden="true"
       width="60"

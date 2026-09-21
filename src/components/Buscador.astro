@@ -1,6 +1,6 @@
 ---
 import { getEntry, getCollection } from "astro:content";
-import { WHATSAPP_NUMBER } from "../config/site";
+import { WHATSAPP_NUMBER, withBase } from "../config/site";
 
 const c = (await getEntry("configBuscador", "buscador"))!.data;
 
@@ -9,25 +9,27 @@ const catalogo = await getCollection("plantasCatalogo");
 
 // Dataset chico para la recomendación en el cliente: no hace falta traer
 // todos los campos, solo los que entran en el matching + lo que se muestra
-// en el resultado.
+// en el resultado. Las imágenes ya salen con el base path resuelto (el
+// script del cliente no sabe nada de `base`, así no hace falta duplicar
+// withBase() del lado del navegador).
 const opciones = [
   ...destacadas.map((p) => ({
     nombre: p.data.nombre,
-    imagen: p.data.imagen,
+    imagen: withBase(p.data.imagen),
     luz: p.data.luz,
     dificultad: p.data.dificultad,
     petFriendly: p.data.petFriendly,
   })),
   ...catalogo.map((p) => ({
     nombre: p.data.nombre,
-    imagen: p.data.imagen,
+    imagen: withBase(p.data.imagen),
     luz: p.data.luz,
     dificultad: p.data.dificultad,
     petFriendly: p.data.categorias.includes("pet-friendly"),
   })),
 ];
 
-const fotoInicial = destacadas[0]?.data.imagen ?? "/plantas/monstera-deliciosa.jpg";
+const fotoInicial = withBase(destacadas[0]?.data.imagen ?? "/plantas/monstera-deliciosa.jpg");
 ---
 
 <section class="mx-auto max-w-[90rem] px-5 py-12 sm:px-8 lg:py-20">
@@ -35,7 +37,7 @@ const fotoInicial = destacadas[0]?.data.imagen ?? "/plantas/monstera-deliciosa.j
     <div class="relative min-h-[22rem] overflow-hidden lg:min-h-[30rem]">
       <img id="buscador-foto" src={fotoInicial} alt="" width="900" height="1100" class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500" />
       <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/92 via-forest-deep/15 to-forest-deep/45"></div>
-      <img src="/logo-mark-white.png" alt="" aria-hidden="true" width="40" height="40" class="absolute left-6 top-6 h-9 w-9 opacity-90 sm:left-8 sm:top-8" />
+      <img src={withBase("/logo-mark-white.png")} alt="" aria-hidden="true" width="40" height="40" class="absolute left-6 top-6 h-9 w-9 opacity-90 sm:left-8 sm:top-8" />
 
       <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
         <p id="buscador-placeholder" class="font-body text-base leading-relaxed text-canvas/80">

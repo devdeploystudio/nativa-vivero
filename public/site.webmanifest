@@ -1,12 +1,12 @@
 {
   "name": "Nativa Vivero",
   "short_name": "Nativa Vivero",
-  "start_url": "/",
+  "start_url": "/nativa-vivero/",
   "display": "standalone",
   "background_color": "#f7f2e7",
   "theme_color": "#bd7b4f",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/nativa-vivero/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/nativa-vivero/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

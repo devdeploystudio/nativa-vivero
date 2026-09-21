@@ -1,5 +1,6 @@
 ---
 import { getEntry } from "astro:content";
+import { withBase } from "../config/site";
 
 const g = (await getEntry("configGaleria", "galeria"))!.data;
 ---
@@ -16,7 +17,7 @@ const g = (await getEntry("configGaleria", "galeria"))!.data;
       {
         g.slides.map((slide) => (
           <div class="galeria-panel relative flex h-full w-screen shrink-0 items-end overflow-hidden">
-            <img src={slide.imagen} alt={slide.titulo} width="1800" height="1200" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+            <img src={withBase(slide.imagen)} alt={slide.titulo} width="1800" height="1200" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/5 to-transparent" />
             <p class="relative z-10 p-6 font-display text-2xl italic text-canvas sm:p-10 sm:text-3xl">{slide.titulo}</p>
           </div>

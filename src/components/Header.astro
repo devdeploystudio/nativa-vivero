@@ -1,18 +1,18 @@
 ---
-import { NAV_LINKS, SITE } from "../config/site";
+import { NAV_LINKS, SITE, withBase } from "../config/site";
 ---
 
 <header class="sticky top-0 z-40 border-b border-hairline/80 bg-canvas/90 backdrop-blur">
   <div class="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-5 py-3 sm:px-8">
-    <a href="/" class="flex items-center gap-2.5">
-      <img src="/logo-mark.png" alt="" aria-hidden="true" width="347" height="311" class="h-9 w-auto object-contain" />
-      <img src="/logo-wordmark.png" alt={SITE.nombre} width="543" height="210" class="h-6 w-auto object-contain" />
+    <a href={withBase("/")} class="flex items-center gap-2.5">
+      <img src={withBase("/logo-mark.png")} alt="" aria-hidden="true" width="347" height="311" class="h-9 w-auto object-contain" />
+      <img src={withBase("/logo-wordmark.png")} alt={SITE.nombre} width="543" height="210" class="h-6 w-auto object-contain" />
     </a>
 
     <nav class="hidden items-center gap-7 lg:flex" aria-label="Navegación principal">
       {
         NAV_LINKS.map((link) => (
-          <a href={link.href} class="nav-link font-body text-sm font-medium text-body transition-colors hover:text-ink">
+          <a href={withBase(link.href)} class="nav-link font-body text-sm font-medium text-body transition-colors hover:text-ink">
             {link.label}
           </a>
         ))
@@ -41,7 +41,7 @@ import { NAV_LINKS, SITE } from "../config/site";
     <div class="flex flex-col gap-1 px-5 py-4 sm:px-8">
       {
         NAV_LINKS.map((link) => (
-          <a href={link.href} class="rounded-lg px-2 py-2.5 font-body text-base font-medium text-ink hover:bg-surface-soft">
+          <a href={withBase(link.href)} class="rounded-lg px-2 py-2.5 font-body text-base font-medium text-ink hover:bg-surface-soft">
             {link.label}
           </a>
         ))

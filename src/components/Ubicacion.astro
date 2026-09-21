@@ -9,7 +9,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
 
 <section id="ubicacion" class="bg-surface-soft py-12 lg:py-20">
   <div class="mx-auto grid max-w-[90rem] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
-    <div class="reveal-on-scroll order-2 lg:order-1">
+    <div class="reveal-on-scroll order-2">
       <p class="font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay-active">Ubicación</p>
       <h2 class="section-rule mt-3 font-display text-3xl text-ink sm:text-4xl">{u.titulo}</h2>
 
@@ -35,7 +35,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
       </a>
     </div>
 
-    <div class="reveal-on-scroll order-1 aspect-[4/3] overflow-hidden rounded-3xl border border-hairline lg:order-2 lg:aspect-auto lg:h-[26rem]">
+    <div class="reveal-on-scroll order-1 aspect-[4/3] overflow-hidden rounded-3xl border border-hairline lg:aspect-auto lg:h-[26rem]">
       <iframe src={u.mapaEmbedUrl} title="Ubicación de Nativa Vivero en el mapa" class="h-full w-full grayscale-[35%]" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
     </div>
   </div>

@@ -1,5 +1,6 @@
 ---
 import { getEntry, getCollection } from "astro:content";
+import { withBase } from "../config/site";
 
 const c = (await getEntry("configCatalogoMacetas", "catalogoMacetas"))!.data;
 const macetas = (await getCollection("macetas")).sort((a, b) => a.data.orden - b.data.orden);
@@ -28,7 +29,7 @@ const SWATCH: Record<string, string> = Object.fromEntries(c.colores.map((color) 
         return (
           <article class="maceta-card reveal-on-scroll overflow-hidden rounded-2xl border border-hairline bg-surface">
             <div class="aspect-square overflow-hidden bg-surface-soft">
-              <img data-maceta-foto src={d.colores[0].imagen} alt={`${d.nombre} en ${d.colores[0].nombre}`} width="700" height="700" loading="lazy" class="h-full w-full object-cover transition-opacity duration-300" />
+              <img data-maceta-foto src={withBase(d.colores[0].imagen)} alt={`${d.nombre} en ${d.colores[0].nombre}`} width="700" height="700" loading="lazy" class="h-full w-full object-cover transition-opacity duration-300" />
             </div>
             <div class="p-5">
               <h3 class="font-display text-xl text-ink">{d.nombre}</h3>
@@ -42,7 +43,7 @@ const SWATCH: Record<string, string> = Object.fromEntries(c.colores.map((color) 
                       class="maceta-swatch h-7 w-7 rounded-full border-2 transition-transform"
                       class:list={[{ "is-active": i === 0 }]}
                       style={`background-color:${SWATCH[color.nombre] ?? "#b8b3a6"}`}
-                      data-imagen={color.imagen}
+                      data-imagen={withBase(color.imagen)}
                       data-alt={`${d.nombre} en ${color.nombre}`}
                       aria-label={color.nombre}
                       title={color.nombre}

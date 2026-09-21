@@ -1,6 +1,6 @@
 ---
 import { getEntry, getCollection } from "astro:content";
-import { WHATSAPP_NUMBER } from "../config/site";
+import { WHATSAPP_NUMBER, withBase } from "../config/site";
 import { buildConsultaPlantaLink } from "../lib/whatsapp";
 
 const c = (await getEntry("configCatalogoPlantas", "catalogoPlantas"))!.data;
@@ -57,7 +57,7 @@ const TABS = [
             <article class="catalogo-card group overflow-hidden rounded-2xl bg-surface" data-categorias={d.categorias.join(" ")}>
               <div class="aspect-square overflow-hidden">
                 <img
-                  src={d.imagen}
+                  src={withBase(d.imagen)}
                   alt={d.nombre}
                   width="500"
                   height="500"

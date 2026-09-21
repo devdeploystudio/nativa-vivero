@@ -3,7 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WhatsappFloat from "../components/WhatsappFloat.astro";
-import { SITE } from "../config/site";
+import { SITE, withBase } from "../config/site";
 
 import newsreader from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
 import newsreaderItalic from "@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url";
@@ -27,14 +27,14 @@ const {
 
 const pageTitle = tituloConGuion ? `${SITE.nombre} - ${title}` : title === SITE.nombre ? title : `${title}, ${SITE.nombre}`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const imageUrl = new URL(image, Astro.site).href;
+const imageUrl = new URL(withBase(image), Astro.site).href;
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "GardenStore",
   name: SITE.nombre,
   description: SITE.descripcion,
-  url: Astro.site?.href,
+  url: new URL(withBase("/"), Astro.site).href,
   address: {
     "@type": "PostalAddress",
     addressLocality: "Escobar",
@@ -52,10 +52,10 @@ const jsonLd = {
     <link rel="preload" as="font" type="font/woff2" href={newsreader} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={newsreaderItalic} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={workSans} crossorigin />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase("/favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="16x16" href={withBase("/favicon-16.png")} />
+    <link rel="apple-touch-icon" href={withBase("/apple-touch-icon.png")} />
+    <link rel="manifest" href={withBase("/site.webmanifest")} />
     <meta name="theme-color" content="#bd7b4f" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />

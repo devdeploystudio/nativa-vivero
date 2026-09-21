@@ -1,5 +1,5 @@
 ---
-import { NAV_LINKS, SITE, INSTAGRAM_URL, WHATSAPP_NUMBER, ESLOGAN } from "../config/site";
+import { NAV_LINKS, SITE, INSTAGRAM_URL, WHATSAPP_NUMBER, ESLOGAN, withBase } from "../config/site";
 import { buildConsultaGeneralLink, formatWhatsappDisplay } from "../lib/whatsapp";
 
 const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
@@ -12,9 +12,9 @@ const year = new Date().getFullYear();
   <div class="mx-auto max-w-[90rem] px-5 py-14 sm:px-8 lg:py-16">
     <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr]">
       <div>
-        <a href="/" class="flex items-center gap-2.5">
-          <img src="/logo-mark.png" alt="" aria-hidden="true" width="347" height="311" class="h-11 w-auto object-contain" />
-          <img src="/logo-wordmark.png" alt={SITE.nombre} width="543" height="210" class="h-7 w-auto object-contain" />
+        <a href={withBase("/")} class="flex items-center gap-2.5">
+          <img src={withBase("/logo-mark.png")} alt="" aria-hidden="true" width="347" height="311" class="h-11 w-auto object-contain" />
+          <img src={withBase("/logo-wordmark.png")} alt={SITE.nombre} width="543" height="210" class="h-7 w-auto object-contain" />
         </a>
         <p class="mt-4 max-w-sm font-body text-sm leading-relaxed text-muted">{ESLOGAN}</p>
       </div>
@@ -25,7 +25,7 @@ const year = new Date().getFullYear();
           {
             NAV_LINKS.map((link) => (
               <li>
-                <a href={link.href} class="font-body text-sm text-muted transition-colors hover:text-ink">
+                <a href={withBase(link.href)} class="font-body text-sm text-muted transition-colors hover:text-ink">
                   {link.label}
                 </a>
               </li>
@@ -54,7 +54,7 @@ const year = new Date().getFullYear();
             </a>
           </li>
           <li>
-            <a href="/contacto" class="font-body text-sm text-muted transition-colors hover:text-ink">Ruta 25, Escobar</a>
+            <a href={withBase("/contacto")} class="font-body text-sm text-muted transition-colors hover:text-ink">Ruta 25, Escobar</a>
           </li>
         </ul>
       </div>
@@ -65,7 +65,7 @@ const year = new Date().getFullYear();
       <span class="footer__credit inline-flex items-center gap-1.5">
         Sitio de prueba realizado por
         <a href="https://deploystudio.com.ar/" target="_blank" rel="noopener noreferrer">
-          <img class="footer__deploy-logo" src="/deploy-logo.png" alt="Deploy" width="900" height="200" loading="lazy" />
+          <img class="footer__deploy-logo" src={withBase("/deploy-logo.png")} alt="Deploy" width="900" height="200" loading="lazy" />
         </a>
       </span>
     </div>

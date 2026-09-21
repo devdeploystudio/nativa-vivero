@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { withBase } from "../config/site";
 
 // Cada link lleva directo a esa colección puntual dentro del panel real
 // (Sveltia CMS, en /admin/). Si no estás logueada todavía, Sveltia pide el
@@ -131,7 +132,7 @@ const grupos = [
               <div class="mt-4 flex flex-col gap-2.5">
                 {grupo.items.map((item) => (
                   <a
-                    href={`/admin/#/collections/${item.coleccion}`}
+                    href={withBase(`/admin/#/collections/${item.coleccion}`)}
                     class="rounded-xl border border-hairline px-4 py-3 font-body text-sm font-semibold text-ink transition-colors hover:border-clay-active hover:text-clay-active"
                   >
                     {item.label} →

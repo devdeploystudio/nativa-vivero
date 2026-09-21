@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { WHATSAPP_NUMBER } from "../config/site";
+import { WHATSAPP_NUMBER, withBase } from "../config/site";
 import { buildConsultaPlantaLink } from "../lib/whatsapp";
 
 const plantas = (await getCollection("plantasDestacadas")).sort((a, b) => a.data.orden - b.data.orden);
@@ -10,77 +10,308 @@ const RIEGO_LABEL: Record<string, string> = { bajo: "Riego bajo", moderado: "Rie
 const DIFICULTAD_LABEL: Record<string, string> = { facil: "Fácil", intermedia: "Intermedia", experta: "Experta" };
 ---
 
-<section id="destacadas" class="py-12 lg:py-20">
-  <div class="mx-auto flex max-w-[90rem] flex-wrap items-end justify-between gap-6 px-5 sm:px-8">
+<section id="destacadas" class="mx-auto max-w-[90rem] px-5 py-12 sm:px-8 lg:py-20">
+  <div class="flex flex-wrap items-end justify-between gap-6">
     <div class="max-w-xl">
       <p class="reveal-on-scroll font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay-active">Plantas destacadas</p>
       <h2 class="reveal-on-scroll section-rule mt-3 font-display text-3xl text-ink sm:text-4xl">Nuestras plantas favoritas, una por una</h2>
     </div>
-    <div class="reveal-on-scroll hidden gap-2 sm:flex">
-      <button id="destacadas-prev" type="button" aria-label="Planta anterior" class="btn-press flex h-11 w-11 items-center justify-center rounded-full border border-hairline text-ink hover:bg-surface-soft">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
+    <div class="planta-carousel__nav reveal-on-scroll">
+      <button type="button" class="planta-carousel__nav-btn planta-carousel__nav-btn--prev" aria-label="Planta anterior">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
       </button>
-      <button id="destacadas-next" type="button" aria-label="Planta siguiente" class="btn-press flex h-11 w-11 items-center justify-center rounded-full border border-hairline text-ink hover:bg-surface-soft">
+      <button type="button" class="planta-carousel__nav-btn planta-carousel__nav-btn--next" aria-label="Planta siguiente">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
       </button>
     </div>
   </div>
 
-  <div class="mx-auto max-w-[90rem]">
-  <div id="destacadas-track" class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-    {
-      plantas.map((p, i) => {
-        const d = p.data;
-        const waLink = buildConsultaPlantaLink(WHATSAPP_NUMBER, d.nombre);
-        return (
-          <article class="reveal-on-scroll w-[82vw] shrink-0 snap-start overflow-hidden rounded-3xl border border-hairline bg-surface sm:w-[26rem]">
-            <div class="aspect-[4/3] overflow-hidden bg-surface-soft">
-              <img src={d.imagen} alt={d.nombre} width="800" height="600" loading={i === 0 ? "eager" : "lazy"} class="h-full w-full object-cover" />
-            </div>
-            <div class="p-6">
-              <p class="font-display text-sm italic text-muted">{d.nombreCientifico}</p>
-              <h3 class="mt-1 font-display text-2xl text-ink">{d.nombre}</h3>
-              <p class="mt-3 font-body text-sm leading-relaxed text-body">{d.descripcion}</p>
+  <div class="planta-carousel reveal-on-scroll mt-10">
+    <div class="planta-carousel__viewport">
+      <div class="planta-carousel__track">
+        {
+          plantas.map((p, i) => {
+            const d = p.data;
+            const waLink = buildConsultaPlantaLink(WHATSAPP_NUMBER, d.nombre);
+            return (
+              <div class="planta-carousel__item">
+                <article class="overflow-hidden rounded-3xl border border-hairline bg-surface">
+                  <div class="aspect-[4/3] overflow-hidden bg-surface-soft">
+                    <img src={withBase(d.imagen)} alt={d.nombre} width="800" height="600" loading={i === 0 ? "eager" : "lazy"} draggable="false" class="h-full w-full object-cover" />
+                  </div>
+                  <div class="p-6">
+                    <p class="font-display text-sm italic text-muted">{d.nombreCientifico}</p>
+                    <h3 class="mt-1 font-display text-2xl text-ink">{d.nombre}</h3>
+                    <p class="mt-3 font-body text-sm leading-relaxed text-body">{d.descripcion}</p>
 
-              <ul class="mt-5 flex flex-wrap gap-2">
-                <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{LUZ_LABEL[d.luz]}</li>
-                <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{RIEGO_LABEL[d.riego]}</li>
-                <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{DIFICULTAD_LABEL[d.dificultad]}</li>
-                {d.petFriendly && <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-forest">🐾 Pet-friendly</li>}
-              </ul>
+                    <ul class="mt-5 flex flex-wrap gap-2">
+                      <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{LUZ_LABEL[d.luz]}</li>
+                      <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{RIEGO_LABEL[d.riego]}</li>
+                      <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-ink">{DIFICULTAD_LABEL[d.dificultad]}</li>
+                      {d.petFriendly && <li class="rounded-full border border-hairline bg-canvas px-3 py-1 font-body text-xs font-semibold text-forest">🐾 Pet-friendly</li>}
+                    </ul>
 
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ubicacion={`destacada-${p.id}`}
-                class="btn-press mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-body text-sm font-semibold text-canvas transition-colors hover:bg-forest-deep"
-              >
-                Consultar disponibilidad
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            </div>
-          </article>
-        );
-      })
-    }
-  </div>
+                    <a
+                      href={waLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-ubicacion={`destacada-${p.id}`}
+                      class="btn-press mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-body text-sm font-semibold text-canvas transition-colors hover:bg-forest-deep"
+                    >
+                      Consultar disponibilidad
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
   </div>
 </section>
 
-<script>
-  const track = document.getElementById("destacadas-track");
-  const prev = document.getElementById("destacadas-prev");
-  const next = document.getElementById("destacadas-next");
-  if (track && prev && next) {
-    const scrollByCard = (dir: number) => {
-      const card = track.querySelector("article");
-      const amount = (card?.clientWidth ?? 320) + 20;
-      track.scrollBy({ left: dir * amount, behavior: "smooth" });
-    };
-    prev.addEventListener("click", () => scrollByCard(-1));
-    next.addEventListener("click", () => scrollByCard(1));
+<style>
+  /* Portado tal cual del carrusel de santilli-aparts / estudio-s3 (Deploy):
+     la tira NO usa scroll nativo (overflow-x/scrollLeft) — se mueve con
+     transform: translateX vía JS, así se evita la familia de bugs de iOS
+     Safari donde el scrollLeft/contentSize interno no se actualiza bien
+     (la causa real de "scroll infinito" en loops caseros con scroll
+     nativo). El drag funciona igual con mouse y con dedo. */
+  .planta-carousel {
+    position: relative;
   }
+  .planta-carousel__viewport {
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .planta-carousel__viewport.is-dragging {
+    cursor: grabbing;
+  }
+  .planta-carousel__track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.25rem;
+    will-change: transform;
+  }
+  .planta-carousel__item {
+    flex: 0 0 85%;
+  }
+  .planta-carousel__item a {
+    -webkit-user-drag: none;
+  }
+  @media (min-width: 640px) {
+    .planta-carousel__item {
+      flex-basis: calc(50% - 0.625rem);
+    }
+  }
+  @media (min-width: 1024px) {
+    .planta-carousel__item {
+      flex-basis: calc(100% / 3 - 0.84rem);
+    }
+  }
+
+  .planta-carousel__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .planta-carousel__nav {
+      display: flex;
+    }
+  }
+  .planta-carousel__nav-btn {
+    display: inline-flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ink);
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .planta-carousel__nav-btn:hover {
+    border-color: var(--color-clay-active);
+    color: var(--color-clay-active);
+  }
+</style>
+
+<script>
+  // Mismo mecanismo que el carrusel de santilli-aparts / estudio-s3
+  // (Deploy): clona la tira una vez para loopear infinito, avanza sola con
+  // requestAnimationFrame (pausa con el mouse/dedo encima, con foco, o
+  // fuera de pantalla), y admite arrastrar con mouse o touch sin depender
+  // de scroll nativo (por eso funciona igual de bien en iOS Safari).
+  function initPlantaCarousel() {
+    const viewport = document.querySelector<HTMLElement>(".planta-carousel__viewport");
+    const track = document.querySelector<HTMLElement>(".planta-carousel__track");
+    const seccion = document.getElementById("destacadas");
+    if (!viewport || !track || !seccion) return;
+    if (track.dataset.cloned === "true") return;
+
+    const originales = Array.from(track.children) as HTMLElement[];
+    if (originales.length <= 1) return;
+
+    track.dataset.cloned = "true";
+    originales.forEach((item) => {
+      const clon = item.cloneNode(true) as HTMLElement;
+      clon.setAttribute("aria-hidden", "true");
+      clon.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
+      track!.appendChild(clon);
+    });
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const VELOCIDAD = 22; // px/s
+
+    let setW = 0;
+    let paso = 0;
+    let pos = 0;
+    let encima = false;
+    let aLaVista = true;
+
+    function medir() {
+      const gap = parseFloat(getComputedStyle(track!).columnGap) || 0;
+      paso = originales[0].getBoundingClientRect().width + gap;
+      setW = originales.reduce((sum, item) => sum + item.getBoundingClientRect().width + gap, 0);
+    }
+    medir();
+    window.addEventListener("resize", medir);
+
+    function mover() {
+      track!.style.transform = `translateX(${-pos}px)`;
+    }
+
+    new IntersectionObserver(
+      ([e]) => {
+        aLaVista = e.isIntersecting;
+      },
+      { threshold: 0.1 },
+    ).observe(viewport);
+
+    (["pointerenter", "focusin"] as const).forEach((ev) => viewport!.addEventListener(ev, () => (encima = true)));
+    (["pointerleave", "focusout"] as const).forEach((ev) => viewport!.addEventListener(ev, () => (encima = false)));
+
+    const clampPos = (p: number) => ((p % setW) + setW) % setW;
+
+    seccion.querySelector(".planta-carousel__nav-btn--prev")?.addEventListener("click", () => {
+      pos = clampPos(pos - paso);
+      mover();
+    });
+    seccion.querySelector(".planta-carousel__nav-btn--next")?.addEventListener("click", () => {
+      pos = clampPos(pos + paso);
+      mover();
+    });
+
+    // Umbral antes de considerar esto un drag real: si no se supera, nunca
+    // se marca "arrastrando", así el navegador deja pasar el click nativo
+    // de los links de "Consultar disponibilidad" con normalidad.
+    const UMBRAL_DRAG_PX = 6;
+
+    let arrastrando = false;
+    let punteroActivo = false;
+    let punteroId: number | null = null;
+    let startX = 0;
+    let startPos = 0;
+    let velX = 0;
+    let lastMoveX = 0;
+    let lastMoveT = 0;
+
+    viewport.addEventListener("pointerdown", (e) => {
+      punteroActivo = true;
+      punteroId = e.pointerId;
+      encima = true;
+      startX = e.clientX;
+      startPos = pos;
+      lastMoveX = e.clientX;
+      lastMoveT = performance.now();
+      velX = 0;
+    });
+
+    let dragRaf: number | undefined;
+    let pendingX = 0;
+    viewport.addEventListener("pointermove", (e) => {
+      if (!punteroActivo) return;
+      pendingX = e.clientX;
+
+      if (!arrastrando) {
+        if (Math.abs(pendingX - startX) < UMBRAL_DRAG_PX) return;
+        arrastrando = true;
+        if (punteroId !== null) viewport!.setPointerCapture(punteroId);
+        viewport!.classList.add("is-dragging");
+      }
+
+      if (dragRaf !== undefined) return;
+      dragRaf = requestAnimationFrame(() => {
+        dragRaf = undefined;
+        const now = performance.now();
+        const dt = now - lastMoveT;
+        if (dt > 0) velX = (lastMoveX - pendingX) / dt;
+        lastMoveX = pendingX;
+        lastMoveT = now;
+        pos = clampPos(startPos + (startX - pendingX));
+        mover();
+      });
+    });
+
+    function inercia() {
+      let v = velX;
+      let last = performance.now();
+      function coast(now: number) {
+        const dt = now - last;
+        last = now;
+        v *= Math.pow(0.94, dt / 16);
+        if (Math.abs(v) < 0.02) {
+          encima = false;
+          return;
+        }
+        pos = clampPos(pos + v * dt);
+        mover();
+        requestAnimationFrame(coast);
+      }
+      coast(last);
+    }
+    function soltar() {
+      punteroActivo = false;
+      punteroId = null;
+      if (!arrastrando) {
+        encima = false;
+        return;
+      }
+      arrastrando = false;
+      if (dragRaf !== undefined) {
+        cancelAnimationFrame(dragRaf);
+        dragRaf = undefined;
+      }
+      viewport!.classList.remove("is-dragging");
+      if (Math.abs(velX) > 0.02) inercia();
+      else encima = false;
+    }
+    viewport.addEventListener("pointerup", soltar);
+    viewport.addEventListener("pointercancel", soltar);
+
+    if (reduceMotion) return;
+
+    let last = performance.now();
+    requestAnimationFrame(function tick(now) {
+      const dt = (now - last) / 1000;
+      last = now;
+      if (!encima && aLaVista) {
+        pos = (pos + VELOCIDAD * dt) % setW;
+        mover();
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  initPlantaCarousel();
 </script>

@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /editor
-Disallow: /admin/
+Disallow: /nativa-vivero/editor
+Disallow: /nativa-vivero/admin/
 
-Sitemap: https://nativavivero.example.com/sitemap-index.xml
+Sitemap: https://devdeploystudio.github.io/nativa-vivero/sitemap-index.xml

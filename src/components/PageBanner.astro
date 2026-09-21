@@ -1,4 +1,6 @@
 ---
+import { withBase } from "../config/site";
+
 interface Props {
   imagen: string;
   kicker: string;
@@ -10,10 +12,10 @@ const { imagen, kicker, titulo, texto } = Astro.props;
 ---
 
 <section class="relative flex min-h-[42svh] items-center justify-center overflow-hidden px-5 py-16 text-center">
-  <img src={imagen} alt="" aria-hidden="true" width="1672" height="941" class="absolute inset-0 h-full w-full object-cover" loading="eager" />
+  <img src={withBase(imagen)} alt="" aria-hidden="true" width="1672" height="941" class="absolute inset-0 h-full w-full object-cover" loading="eager" />
   <div class="absolute inset-0 bg-gradient-to-t from-forest-deep/90 via-forest-deep/55 to-forest-deep/40"></div>
   <div class="relative z-10 mx-auto flex max-w-2xl flex-col items-center">
-    <img src="/logo-mark-white.png" alt="" aria-hidden="true" width="56" height="56" class="reveal-on-scroll h-12 w-12 object-contain opacity-95" />
+    <img src={withBase("/logo-mark-white.png")} alt="" aria-hidden="true" width="56" height="56" class="reveal-on-scroll h-12 w-12 object-contain opacity-95" />
     <p class="reveal-on-scroll mt-4 font-body text-sm font-semibold uppercase tracking-[0.18em] text-clay">{kicker}</p>
     <h1 class="reveal-on-scroll mt-3 font-display text-4xl text-canvas [text-shadow:0_2px_16px_rgba(0,0,0,0.35)] sm:text-5xl">{titulo}</h1>
     <p class="reveal-on-scroll mt-4 font-body text-base text-canvas/85">{texto}</p>
