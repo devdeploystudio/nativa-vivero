@@ -1,6 +1,6 @@
 inicioHero:
-  id: "inicio-hero"
-  titulo: "Cada rincón se transforma con una planta bien elegida"
-  bajada: "Somos un vivero familiar especializado en plantas de interior y exterior. Te ayudamos a elegir la que mejor se adapta a tu luz, tu espacio y tu ritmo, sin vueltas y con asesoramiento real."
-  ctaPrincipalTexto: "Consultar por WhatsApp"
-  ctaSecundarioTexto: "Ver plantas destacadas"
+  id: inicio-hero
+  titulo: Cada rincón se transforma con una planta bien elegida.
+  bajada: Somos un vivero familiar especializado en plantas de interior y exterior. Te ayudamos a elegir la que mejor se adapta a tu luz, tu espacio y tu ritmo, sin vueltas y con asesoramiento real.
+  ctaPrincipalTexto: Consultar por WhatsApp
+  ctaSecundarioTexto: Ver plantas destacadas
