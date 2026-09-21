@@ -157,13 +157,15 @@ const configGaleria = defineCollection({
   }),
 });
 
-// ---------- 🌤️ Guía de cuidados (acordeón) ----------
-// Tiene que coincidir EXACTO con las claves de ICONOS en
+// ---------- Biblioteca de íconos compartida (widget "icon-picker") ----------
+// La usan varias colecciones (guía de cuidados, cómo funciona) para
+// cualquier campo donde el ícono representa algo puntual del contenido,
+// no decorativo. Tiene que coincidir EXACTO con las claves de ICONOS en
 // public/admin/icon-picker.js (el widget visual del panel) y en
 // src/components/Icon.astro (el que realmente dibuja el ícono en el
 // sitio) — son tres archivos separados que no pueden compartir módulo
 // (dos corren en Node/build, uno es JS de navegador clásico sin bundler).
-const ICONO_CUIDADO = [
+const ICONOS_PANEL = [
   "sol",
   "gota",
   "hoja",
@@ -187,7 +189,7 @@ const configGuiaCuidados = defineCollection({
     kicker: z.string(),
     titulo: z.string(),
     imagen: z.string(),
-    items: z.array(z.object({ icono: z.enum(ICONO_CUIDADO), pregunta: z.string(), respuesta: z.string() })),
+    items: z.array(z.object({ icono: z.enum(ICONOS_PANEL), pregunta: z.string(), respuesta: z.string() })),
   }),
 });
 
@@ -218,7 +220,7 @@ const configComoFunciona = defineCollection({
     id: z.string(),
     titulo: z.string(),
     texto: z.string(),
-    pasos: z.array(z.object({ titulo: z.string(), texto: z.string() })),
+    pasos: z.array(z.object({ icono: z.enum(ICONOS_PANEL), titulo: z.string(), texto: z.string() })),
   }),
 });
 
@@ -230,7 +232,11 @@ const configUbicacion = defineCollection({
     titulo: z.string(),
     direccion: z.string(),
     horario: z.string(),
-    mapaEmbedUrl: z.string(),
+    // Se arma el iframe solo a partir de esto (ver Ubicacion.astro) — así
+    // el cliente solo tiene que pegar dos números sacados de Google Maps,
+    // en vez de tener que generar un link "Embed" a mano.
+    lat: z.number(),
+    lng: z.number(),
   }),
 });
 

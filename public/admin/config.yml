@@ -246,9 +246,10 @@ collections:
               - label: "Pasos"
                 name: "pasos"
                 widget: "list"
-                hint: "Se pueden agregar, borrar y reordenar arrastrando. El número (01, 02...) lo pone el diseño solo según el orden."
+                hint: "Se pueden agregar, borrar y reordenar arrastrando. El número (01, 02...) lo pone el diseño solo según el orden. Para cada paso nuevo, tocá el dibujo que mejor lo represente."
                 summary: "{{fields.titulo}}"
                 fields:
+                  - { label: "Ícono", name: "icono", widget: "icon-picker" }
                   - { label: "Título", name: "titulo", widget: "string" }
                   - { label: "Texto", name: "texto", widget: "text" }
 
@@ -430,10 +431,8 @@ collections:
               - { label: "Título", name: "titulo", widget: "string" }
               - { label: "Dirección", name: "direccion", widget: "string" }
               - { label: "Horario", name: "horario", widget: "text" }
-              - label: "Link del mapa"
-                name: "mapaEmbedUrl"
-                widget: "string"
-                hint: "Pegar acá el link \"Embed\" que da OpenStreetMap (Compartir → HTML) apuntando a la dirección del vivero."
+              - { label: "Latitud", name: "lat", widget: "number", value_type: "float", hint: "En Google Maps, hacé clic derecho justo sobre el punto exacto del vivero: arriba del menú aparecen dos números (ej: -34.3486, -58.7969). Ese primero es la latitud — un clic sobre el número lo copia." }
+              - { label: "Longitud", name: "lng", widget: "number", value_type: "float", hint: "El segundo de esos dos números, del mismo clic derecho en Google Maps." }
 
   - name: "config"
     label: "⚙️ General"

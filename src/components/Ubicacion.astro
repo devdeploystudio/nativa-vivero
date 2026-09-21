@@ -5,6 +5,10 @@ import { buildConsultaGeneralLink } from "../lib/whatsapp";
 
 const u = (await getEntry("configUbicacion", "ubicacion"))!.data;
 const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
+
+// Iframe de Google Maps sin API key (truco conocido: "q=lat,lng&output=embed"),
+// armado solo a partir de las dos coordenadas cargadas en el panel.
+const mapaEmbedUrl = `https://www.google.com/maps?q=${u.lat},${u.lng}&z=15&output=embed`;
 ---
 
 <section id="ubicacion" class="bg-surface-soft py-12 lg:py-20">
@@ -36,7 +40,7 @@ const waLink = buildConsultaGeneralLink(WHATSAPP_NUMBER);
     </div>
 
     <div class="reveal-on-scroll order-1 aspect-[4/3] overflow-hidden rounded-3xl border border-hairline lg:aspect-auto lg:h-[26rem]">
-      <iframe src={u.mapaEmbedUrl} title="Ubicación de Nativa Vivero en el mapa" class="h-full w-full grayscale-[35%]" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
+      <iframe src={mapaEmbedUrl} title="Ubicación de Nativa Vivero en el mapa" class="h-full w-full grayscale-[35%]" loading="lazy" referrerpolicy="no-referrer-when-downgrade" />
     </div>
   </div>
 </section>

@@ -3,4 +3,5 @@ ubicacion:
   titulo: "Visitanos en Escobar"
   direccion: "Ruta 25, km 3.5, Escobar, Buenos Aires"
   horario: "Lunes a sábados de 9 a 19 h. Domingos de 9 a 13 h."
-  mapaEmbedUrl: "https://www.openstreetmap.org/export/embed.html?bbox=-58.8250%2C-34.3650%2C-58.7650%2C-34.3320&layer=mapnik&marker=-34.3486%2C-58.7969"
+  lat: -34.3486
+  lng: -58.7969
