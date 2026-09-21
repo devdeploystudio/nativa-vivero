@@ -28,8 +28,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Instalar, build y preparar el artifact de Pages
         uses: withastro/action@v3
-        # No hace falta pasarle "path" ni "node-version": lee package.json
-        # (Astro en la raíz del repo) y el engines.node solo.
+        with:
+          # El runner de GitHub trae Node 20 por defecto, pero Astro 7
+          # necesita >=22.12 (ver "engines" en package.json) — si no se
+          # fija acá, la action ignora ese campo y falla el build.
+          node-version: "22"
 
   deploy:
     needs: build
